@@ -13,49 +13,111 @@ class CadastroPaciente extends StatefulWidget {
   // always marked "final".
 
   @override
-  State<CadastroPaciente> createState() => _CadastroPacienteState();
+  State<CadastroPaciente> createState() => CadastroPacienteState();
 }
 
-class _CadastroPacienteState extends State<CadastroPaciente> {
+class CadastroPacienteState extends State<CadastroPaciente> {
   String _password = '';
-  Color _eightchars = Colors.black;
-  Color _special_caracter = Colors.black;
-  Color _uppercase = Colors.black;
-  Color _lowercase = Colors.black;
-  Color _password_confirmation = Colors.black;
+  Color _eightChars = Colors.black;
+  Color _specialCaracter = Colors.black;
+  Color _upperCase = Colors.black;
+  Color _lowerCase = Colors.black;
+  Color _passwordConfirmation = Colors.black;
+
+  int testPasswordLength(text) {
+    RegExp eightChar = RegExp(r'.{8}');
+    if (eightChar.hasMatch(text)) {
+      return 1;
+    }
+    else if (text == ''){
+      return 0;
+    }
+    else {
+      return -1;
+    }
+  }
+
+  int testUpperCase(text) {
+    RegExp upperCase = RegExp(r'.*[A-Z].*');
+    if (upperCase.hasMatch(text)) {
+      return 1;
+    }
+    else if (text == ''){
+      return 0;
+    }
+    else {
+      return -1;
+    }
+  }
+
+  int testLowerCase(text) {
+    RegExp lowerCase = RegExp(r'.*[a-z].*');
+    if (lowerCase.hasMatch(text)) {
+      return 1;
+    }
+    else if (text == ''){
+      return 0;
+    }
+    else {
+      return -1;
+    }
+  }
+
+  int testSpecialCaracters(text) {
+    RegExp especialCaracters = RegExp(r'.*[!@#\$&*~].*');
+    if (especialCaracters.hasMatch(text)) {
+      return 1;
+    }
+    else if (text == ''){
+      return 0;
+    }
+    else {
+      return -1;
+    }
+  }
 
   void _validatePassword(text) {
     setState(() {
       _password = text;
-      RegExp eightchar = RegExp(r'.{8}');
-      RegExp uppercase = RegExp(r'.*[A-Z].*');
-      RegExp lowercase = RegExp(r'.*[a-z].*');
-      if (eightchar.hasMatch(text)) {
-        _eightchars = Colors.green;
+
+      if (testPasswordLength(text) == 1) {
+        _eightChars = Colors.green;
       }
-      else if (text == ''){
-        _eightchars = Colors.black;
+      else if (testPasswordLength(text) == 0) {
+        _eightChars = Colors.black;
       }
       else {
-        _eightchars = Colors.red;
+        _eightChars = Colors.red;
       }
-      if (uppercase.hasMatch(text)) {
-        _uppercase = Colors.green;
+
+      if (testUpperCase(text)==1) {
+        _upperCase = Colors.green;
       }
-      else if (text == ''){
-        _uppercase = Colors.black;
-      }
-      else {
-        _uppercase = Colors.red;
-      }
-      if (lowercase.hasMatch(text)) {
-        _lowercase = Colors.green;
-      }
-      else if (text == ''){
-        _lowercase= Colors.black;
+      else if (testUpperCase(text)==0){
+        _upperCase = Colors.black;
       }
       else {
-        _lowercase = Colors.red;
+        _upperCase = Colors.red;
+      }
+
+      if (testLowerCase(text)==1) {
+        _lowerCase = Colors.green;
+      }
+      else if (testLowerCase(text)==0){
+        _lowerCase = Colors.black;
+      }
+      else {
+        _lowerCase = Colors.red;
+      }
+
+      if (testSpecialCaracters(text)==1) {
+        _specialCaracter = Colors.green;
+      }
+      else if (testLowerCase(text)==0){
+        _specialCaracter = Colors.black;
+      }
+      else {
+        _specialCaracter = Colors.red;
       }
     });
   }
@@ -63,13 +125,13 @@ class _CadastroPacienteState extends State<CadastroPaciente> {
   void _validatePasswordConfirmation(text) {
     setState(() {
       if (text=='') {
-        _password_confirmation = Colors.black;
+        _passwordConfirmation = Colors.black;
       }
       else if (text == _password) {
-        _password_confirmation = Colors.green;
+        _passwordConfirmation = Colors.green;
       }
       else {
-        _password_confirmation = Colors.red;
+        _passwordConfirmation = Colors.red;
       }
     });
   }
@@ -145,14 +207,16 @@ class _CadastroPacienteState extends State<CadastroPaciente> {
           ),
           const Text('Sua senha precisa:',textAlign: TextAlign.left,),
           Text('- Oito ou mais caracteres',textAlign: TextAlign.left, style: TextStyle(
-            color: _eightchars,
+            color: _eightChars,
           ),),
-          Text('- Um ou mais caracteres especiais',textAlign: TextAlign.left,),
+          Text('- Um ou mais caracteres especiais',textAlign: TextAlign.left,style: TextStyle(
+            color: _specialCaracter,
+          ),),
           Text('- Uma ou mais letras maiusculas',textAlign: TextAlign.left, style: TextStyle(
-            color: _uppercase,
+            color: _upperCase,
           ),),
           Text('- Uma ou mais letras minusculas',textAlign: TextAlign.left, style: TextStyle(
-            color: _lowercase,
+            color: _lowerCase,
           ),),
           TextField(
             onChanged: (text) {
@@ -163,8 +227,8 @@ class _CadastroPacienteState extends State<CadastroPaciente> {
               labelText: 'Senha',
             ),
           ),
-          Text('A confirmacao precisa ser igual a senha',textAlign: TextAlign.left, style: TextStyle(
-            color: _password_confirmation,
+          Text('A confirmacao precisa ser igual a senha',textAlign: TextAlign.start, style: TextStyle(
+            color: _passwordConfirmation,
           ),),
           TextField(
             onChanged: (text) {
