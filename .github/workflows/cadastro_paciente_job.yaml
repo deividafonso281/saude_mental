@@ -16,11 +16,8 @@ jobs:
         with:
           channel: "stable"
 
-      - name: "Pub get"
-        run: flutter pub get 
-          
       - name: "Analyze"
-        run: flutter analyze
+        run: flutter pub get && flutter analyze
         working-directory: ${{env.working-directory}}
 
       - name: "Run tests"
