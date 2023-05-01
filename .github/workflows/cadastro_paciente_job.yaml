@@ -1,0 +1,21 @@
+name: Pagina de cadastro de pacientes tests
+
+on:
+  push:
+    branches:
+      - 2-feature-construir-a-tela-de-cadastro-dos-pacientes
+
+jobs:
+  Flutter_Tests:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v1
+        with:
+          java-version: "18.x"
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: "stable"
+      - run: flutter pub get
+      - run: flutter analyze
+      - run: flutter test test/cadastro_paciente_test.dart
