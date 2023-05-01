@@ -1,6 +1,5 @@
 import 'package:test/test.dart';
 import 'package:frontend/cadastro_paciente.dart';
-import 'package:flutter/material.dart';
 
 void main() {
   group("Pagina de cadastro de pacientes",(){

@@ -148,7 +148,7 @@ class CadastroPacienteState extends State<CadastroPaciente> {
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text("Safe Mind"),
+        title: const Text("Safe Mind"),
       ),
       body:
       // Center is a layout widget. It takes a single child and positions it
@@ -223,7 +223,7 @@ class CadastroPacienteState extends State<CadastroPaciente> {
               _validatePassword(text);
             },
             obscureText: true,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'Senha',
             ),
           ),
@@ -235,7 +235,7 @@ class CadastroPacienteState extends State<CadastroPaciente> {
               _validatePasswordConfirmation(text);
             },
             obscureText: true,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'Confirmar senha',
             ),
           ),
