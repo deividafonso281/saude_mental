@@ -2,10 +2,10 @@ import 'package:test/test.dart';
 import 'package:frontend/cadastro_paciente.dart';
 
 void main() {
+
   group("Pagina de cadastro de pacientes",(){
   test('Password has less than 8 caracters', () {
     final CadastroPacienteState estado = CadastroPacienteState();
-
     expect(estado.testPasswordLength("Aaaaaaa"), -1);
     expect(estado.testPasswordLength(""), 0);
     expect(estado.testPasswordLength("Aaaaaaaaaaa"),1);

@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CadastroPaciente extends StatefulWidget {
   const CadastroPaciente({super.key});
@@ -23,6 +25,16 @@ class CadastroPacienteState extends State<CadastroPaciente> {
   Color _upperCase = Colors.black;
   Color _lowerCase = Colors.black;
   Color _passwordConfirmation = Colors.black;
+  final List<String> _genders = ['Feminino', 'Não-Binário', 'Masculino'];
+  String? _selectedGender;
+  File? _image;
+
+  Future<void> _pickImage(ImageSource source) async {
+    final pickedFile = await ImagePicker().pickImage(source: source);
+    setState(() {
+      _image = File(pickedFile!.path);
+    });
+  }
 
   int testPasswordLength(text) {
     RegExp eightChar = RegExp(r'.{8}');
@@ -153,97 +165,182 @@ class CadastroPacienteState extends State<CadastroPaciente> {
       body:
       // Center is a layout widget. It takes a single child and positions it
       // in the middle of the parent.
-      Column(
-        // Column is also a layout widget. It takes a list of children and
-        // arranges them vertically. By default, it sizes itself to fit its
-        // children horizontally, and tries to be as tall as its parent.
-        //
-        // Invoke "debug painting" (press "p" in the console, choose the
-        // "Toggle Debug Paint" action from the Flutter Inspector in Android
-        // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-        // to see the wireframe for each widget.
-        //
-        // Column has various properties to control how it sizes itself and
-        // how it positions its children. Here we use mainAxisAlignment to
-        // center the children vertically; the main axis here is the vertical
-        // axis because Columns are vertical (the cross axis would be
-        // horizontal).
-        children: <Widget>[
-          const TextField(
-            obscureText: false,
-            decoration: InputDecoration(
-              labelText: 'Bairro',
+      SingleChildScrollView(
+        child: Column(
+          // Column is also a layout widget. It takes a list of children and
+          // arranges them vertically. By default, it sizes itself to fit its
+          // children horizontally, and tries to be as tall as its parent.
+          //
+          // Invoke "debug painting" (press "p" in the console, choose the
+          // "Toggle Debug Paint" action from the Flutter Inspector in Android
+          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
+          // to see the wireframe for each widget.
+          //
+          // Column has various properties to control how it sizes itself and
+          // how it positions its children. Here we use mainAxisAlignment to
+          // center the children vertically; the main axis here is the vertical
+          // axis because Columns are vertical (the cross axis would be
+          // horizontal).
+          children: <Widget>[
+            CircleAvatar(
+              radius: 80,
+              backgroundImage: _image != null ? FileImage(_image!) : null,
+              child: _image == null
+                ? Icon(
+                  Icons.person,
+                  size: 80,
+                )
+                : null,
             ),
-          ),
-          const TextField(
-            obscureText: false,
-            decoration: InputDecoration(
-              labelText: 'Cidade',
+            SizedBox(
+              height: 16,
             ),
-          ),
-          const TextField(
-            obscureText: false,
-            decoration: InputDecoration(
-              labelText: 'Pais',
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    _pickImage(ImageSource.camera);
+                  },
+                  child: Text('Take a picture'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    _pickImage(ImageSource.gallery);
+                  },
+                  child: Text('Pick an image'),
+                ),
+              ],
             ),
-          ),
-          const TextField(
-            obscureText: false,
-            decoration: InputDecoration(
-              labelText: 'Complemento',
+            const TextField(
+              obscureText: false,
+              decoration: InputDecoration(
+                labelText: 'Nome Completo',
+              ),
             ),
-          ),
-          const TextField(
-            obscureText: false,
-            decoration: InputDecoration(
-              labelText: 'Email',
+            const TextField(
+              obscureText: false,
+              decoration: InputDecoration(
+                labelText: 'Data de Nascimento',
+              ),
             ),
-          ),
-          const TextField(
-            obscureText: false,
-            decoration: InputDecoration(
-              labelText: 'Confirmar email',
+            const TextField(
+              obscureText: false,
+              decoration: InputDecoration(
+                labelText: 'Telefone',
+              ),
             ),
-          ),
-          const Text('Sua senha precisa:',textAlign: TextAlign.left,),
-          Text('- Oito ou mais caracteres',textAlign: TextAlign.left, style: TextStyle(
-            color: _eightChars,
-          ),),
-          Text('- Um ou mais caracteres especiais',textAlign: TextAlign.left,style: TextStyle(
-            color: _specialCaracter,
-          ),),
-          Text('- Uma ou mais letras maiusculas',textAlign: TextAlign.left, style: TextStyle(
-            color: _upperCase,
-          ),),
-          Text('- Uma ou mais letras minusculas',textAlign: TextAlign.left, style: TextStyle(
-            color: _lowerCase,
-          ),),
-          TextField(
-            onChanged: (text) {
-              _validatePassword(text);
-            },
-            obscureText: true,
-            decoration: const InputDecoration(
-              labelText: 'Senha',
+            DropdownButtonFormField(
+              value: _selectedGender, // Set the selected option
+              items: _genders.map((gender) { // Map the list of options to DropdownMenuItem widgets
+                return DropdownMenuItem(
+                  value: gender,
+                  child: Text(gender),
+                );
+              }).toList(),
+              onChanged: (value) { // Set the selected option to the variable when the user changes it
+                setState(() {
+                  _selectedGender = value;
+                });
+              },
+              decoration: InputDecoration(
+                labelText: 'Gênero',
+              ),
             ),
-          ),
-          Text('A confirmacao precisa ser igual a senha',textAlign: TextAlign.start, style: TextStyle(
-            color: _passwordConfirmation,
-          ),),
-          TextField(
-            onChanged: (text) {
-              _validatePasswordConfirmation(text);
-            },
-            obscureText: true,
-            decoration: const InputDecoration(
-              labelText: 'Confirmar senha',
+            const TextField(
+              obscureText: false,
+              decoration: InputDecoration(
+                labelText: 'CEP',
+              ),
             ),
-          ),
-          ElevatedButton(
-              onPressed: (){},
-              child: const Text("Cadastrar")
-          )
-        ],
+            const TextField(
+              obscureText: false,
+              decoration: InputDecoration(
+                labelText: 'Endereco',
+              ),
+            ),
+            const TextField(
+              obscureText: false,
+              decoration: InputDecoration(
+                labelText: 'Numero',
+              ),
+            ),
+            const TextField(
+              obscureText: false,
+              decoration: InputDecoration(
+                labelText: 'Bairro',
+              ),
+            ),
+            const TextField(
+              obscureText: false,
+              decoration: InputDecoration(
+                labelText: 'Cidade',
+              ),
+            ),
+            const TextField(
+              obscureText: false,
+              decoration: InputDecoration(
+                labelText: 'Pais',
+              ),
+            ),
+            const TextField(
+              obscureText: false,
+              decoration: InputDecoration(
+                labelText: 'Complemento',
+              ),
+            ),
+            const TextField(
+              obscureText: false,
+              decoration: InputDecoration(
+                labelText: 'Email',
+              ),
+            ),
+            const TextField(
+              obscureText: false,
+              decoration: InputDecoration(
+                labelText: 'Confirmar email',
+              ),
+            ),
+            const Text('Sua senha precisa:',textAlign: TextAlign.left,),
+            Text('- Oito ou mais caracteres',textAlign: TextAlign.left, style: TextStyle(
+              color: _eightChars,
+            ),),
+            Text('- Um ou mais caracteres especiais',textAlign: TextAlign.left,style: TextStyle(
+              color: _specialCaracter,
+            ),),
+            Text('- Uma ou mais letras maiusculas',textAlign: TextAlign.left, style: TextStyle(
+              color: _upperCase,
+            ),),
+            Text('- Uma ou mais letras minusculas',textAlign: TextAlign.left, style: TextStyle(
+              color: _lowerCase,
+            ),),
+            TextField(
+              onChanged: (text) {
+                _validatePassword(text);
+              },
+              obscureText: true,
+              decoration: const InputDecoration(
+                labelText: 'Senha',
+              ),
+            ),
+            Text('A confirmacao precisa ser igual a senha',textAlign: TextAlign.start, style: TextStyle(
+              color: _passwordConfirmation,
+            ),),
+            TextField(
+              onChanged: (text) {
+                _validatePasswordConfirmation(text);
+              },
+              obscureText: true,
+              decoration: const InputDecoration(
+                labelText: 'Confirmar senha',
+              ),
+            ),
+            ElevatedButton(
+                onPressed: (){},
+                child: const Text("Cadastrar")
+            )
+          ],
+        ),
       ),
     );
   }
