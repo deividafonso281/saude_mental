@@ -26,4 +26,3 @@ O aplicativo da odontoprev permite o agendamento de consultas com dentistas e fo
 6. [Foto da tela do aplicativo da odontoprev para busca de dentistas por endereço](https://github.com/deividafonso281/saude_mental/blob/main/images/odontoprev7.jpeg)
 7. [Foto da tela do aplicativo da odontoprev com o resultado da busca de dentistas por endereço](https://github.com/deividafonso281/saude_mental/blob/main/images/odontoprev8.jpeg)
 8. [Foto da tela do aplicativo da odontoprev após selecionar um dos profissionais buscados](https://github.com/deividafonso281/saude_mental/blob/main/images/odontoprev9.jpeg)
-
