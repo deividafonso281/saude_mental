@@ -4,10 +4,10 @@
 
 Para a realização da atividade foi escolhida a técnica de benchmarking tendo em vista o acesso fácil a aplicações com finalidades semelhantes. Durante a prática, foram selecionadas três aplicações semelhantes aquela proposta por nós, para avaliação de um conjunto de features que o grupo julgava interessante desenvolver para solução do aplicativo, com foco em saúde de mental.
 Para cada aplicação o procendimento adotado para verificar suas funcionalidades esta listado a seguir:
-    1. Documentação/features de interesse do aplicativo.
-    2. Captura de screenchots e análise de vídeos de usabilidade dos aplicativos.
-    3. Teste de usabilidade dos aplicativos que o grupo teve acesso.
-    4. Registrar os pontos positivos e negativo dos aplicativos.
+- Documentação/features de interesse do aplicativo.
+- Captura de screenchots e análise de vídeos de usabilidade dos aplicativos.
+- Teste de usabilidade dos aplicativos que o grupo teve acesso.
+- Registrar os pontos positivos e negativo dos aplicativos.
 
 ## Aplicações utilizadas no benchmarking
 
@@ -61,7 +61,7 @@ O resultado da busca é uma lista de cards de serviço de saúde que atende os c
 Quando o usuário clica em um serviço da página anterior, o fluxo encaminha-se para o fim ao exibir uma tela com um calendário, imagem [10], no qual alguns dias está marcado como verde, para representar a disponibilidade de horários para realizar o serviço selecionado anteriormente. Na parte superior desta tela estão informações do serviço, enquanto que na parte inferior estão os horários com a disponibilidade do dia selecionado pelo usuário. Quando o usuário clica então em um desses horários, ele é direcionado para um tela com informações do seu agendamento [11] e depois para outra com a suas informações de contato [12].  Ao clicar no botão agendar nessa última tela, a consulta é agendada.
 O agendamento realizado fica então em uma seção de agendamentos [13], no qual o usuário pode consultar e verificar seus históricos de consultas. Nessa tela é possível filtrá-los por agendado, confirmado pela clínica, cancelados e concluídos.
 
-####Pontos positivos
+#### Pontos positivos
 1. Redundância de rotas para acessar a mesma funcionalidade
 2. Mesma tela de login para os pacientes e médicos.
 3. Fluxo de cadastro simplificado, de modo se ramificar entre pacientes e médicos, apenas na inserção dos dados.
@@ -70,7 +70,7 @@ O agendamento realizado fica então em uma seção de agendamentos [13], no qual
 6. Gerencimanto de agendamentos pelo aplicativo.
 7. seção de atalhos, na home do aplicativo
 
-####Pontos negativos
+#### Pontos negativos
 1. UI não é receptiva ao usuário
 
 ### 3. Telavita
