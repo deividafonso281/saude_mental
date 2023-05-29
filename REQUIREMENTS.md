@@ -112,32 +112,49 @@ O agendamento realizado fica então em uma seção de agendamentos [13], no qual
 
 O aplicativo da Telavita permite o agendamento de consultas com psicólogos e foi utilizado por um dos membros do grupo. Abaixo temos fotos de algumas telas vistas e algumas funcionalidades utilizadas.
 
-1. [1](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita1.png)
-2. [2](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita2.png)
-3. [3](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita3.png)
-4. [4](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita4.png)
-5. [5](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita5.png)
-6. [6](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita6.png)
-7. [7](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita7.png)
-8. [8](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita8.png)
-9. [9](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita9.png)
-10. [10](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita10.png)
-11. [11](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita11.png)
-12. [12](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita12.png)
-13. [13](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita13.png)
-14. [14](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita14.png)
-15. [15](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita15.png)
-16. [16](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita16.png)
-17. [17](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita17.png)
-18. [18](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita18.png)
-19. [19](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita19.png)
-20. [20](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita20.png)
-21. [21](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita21.png)
-22. [22](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita22.png)
-23. [23](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita23.png)
-24. [24](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita24.png)
-25. [25](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita25.png)
-26. [26](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita26.png)
+1. [Print da tela inicial ao logar na conta](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita1.png)
+2. [Print mostrando como os profissionais são listados na busca](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita2.png)
+3. [Print mostrando mais alguns profissionais](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita3.png)
+4. [Print do perfil do especialista](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita4.png)
+5. [Print mostrando o resultado de uma busca por tema. Nesse caso, o tema buscado foi “Ansiedade”](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita5.png)
+6. [Print de opções usadas para filtrar resultados](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita6.png)
+7. [Print com mais algumas opções usadas para filtrar resultados](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita7.png)
+8. [Print mostrando como marcar consulta escolhendo dia e horário](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita8.png)
+9. [Print da primeira parte da “compra” de uma consulta](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita9.png)
+10. [Print da tela de pagamento da consulta](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita10.png)
+11. [Print do chat, que está presente em todas as páginas da plataforma](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita11.png)
+12. [Print da tela de perfil do usuário/paciente](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita12.png)
+13. [Print das consultas do usuário na sua tela de perfil](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita13.png)
+14. [Print da tela de adição de convênio](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita14.png)
+15. [Print mostrando como adicionar um convênio 1](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita15.png)
+16. [Print mostrando como adicionar um convênio 2](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita16.png)
+17. [Print da consulta de teste](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita17.png)
+18. [Print da tela quando você clica em marcar consulta a partir do seu perfil](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita18.png)
+19. [Print da tela de busca por psiquiatra](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita19.png)
+20. [Print da tela inicial do site, sem estar logado](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita20.png)
+21. [Print da tela de escolha do tipo de conta que o usuário/paciente quer criar](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita21.png)
+22. [Print da tela de cadastro de usuário/paciente particular](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita22.png)
+23. [Print da tela de login](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita23.png)
+24. [Print da tela de escolha do tipo de conta que o especialista quer criar](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita24.png)
+25. [Print da tela de cadastro de psicólogo](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita25.png)
+26. [Print da tela de cadastro de psiquiatra](https://github.com/deividafonso281/saude_mental/blob/main/images/Telavita/telavita26.png)
+
+<<<<<<< HEAD
+A feature que mais chamou a atenção nessa plataforma de telemedicina foi a de busca de especialista: é possível fazer busca por profissionais de diversas formas, como por exemplo, por gênero do profissional, pela abordagem terapêutica que ele usa e pelo idioma e pela idade que ele atende. A partir da busca, você pode ver o perfil do especialista, que contêm uma descrição do profissional, sua experiência (os temas que ele atende), sua formação, o valor cobrado (a ideia é que os especialistas ofereçam seus serviços gratuitamente na nossa plataforma, por isso valor cobrado não será uma das coisas que o especialista deverá preencher no cadastro), o tempo médio da sua consulta, dias e horários disponíveis para consultas (também não teremos essa feature no nosso projeto pois não vai ter a opção de marcar consulta) e avaliações de usuários. No Telavita também existe a opção de escolher o dia específico que você quer ser atendido e a opção de pesquisar especialistas por temas, então se você quiser ser atendido por um profissional especialista em casos de TOC, por exemplo, você pesquisa o tema TOC. 
+Outras features que pretendemos colocar no nosso aplicativo que também existem na Telavita são: cadastro de paciente, cadastro de especialista e login. A parte de cadastro de especialista, no Telavita, parece ser burocrático, uma vez que você precisa ser avaliado para só então ser adicionado como psicólogo/psiquiatra na plataforma. A ideia do nosso site é que não seja tão burocrático. Outra feature de interesse da aplicação é a adição de convênio no perfil do usuário. 
+Além disso, o Telavita possui outras funcionalidades que, apesar de serem interessantes, não são features de interesse para nós como, por exemplo, a opção de marcar consulta (como dito anteriormente, no nosso projeto, inicialmente, não serão feitas marcações de consulta), o pagamento da consulta, o teste de câmera e microfone numa “consulta de teste”, o chat para tirar dúvidas e o perfil com o histórico de consultas e as consultas marcadas.
+
+Pontos positivos:
+- Busca por diversos temas
+- Aparecer os dias e horários que o especialista pode atender
+- Ser telemedicina
+- Ter uma consulta de teste
+- O perfil do especialista ter muitas informações importantes como experiência e formação
+- Atendimento em outros idiomas
+
+Pontos negativos:
+- A plataforma tem poucas opções de pagamento. Você só pode utilizar cartão de crédito
+- O cadastro de especialista é burocrático. Para se cadastrar, o profissional precisa passar por uma seleção e avaliação
 
 ## Resultado
 
