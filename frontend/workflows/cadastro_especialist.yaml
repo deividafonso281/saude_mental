@@ -1,0 +1,22 @@
+jobs:
+  Cadastro_especialista_Test:
+    env:
+      working-directory: ./frontend
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'zulu'
+          java-version: '11'
+      - uses: subosito/flutter-action@v2           
+      
+      - name: "Analyze"
+        run: flutter pub get && flutter analyze .
+        working-directory: ${{env.working-directory}}
+
+      - name: "Run tests"
+        run: flutter pub get
+        run: flutter test test/cadastro_especialist.test
+        run: flutter build apk
+        run: flutter build appbundle        
+        working-directory: ${{env.working-directory}}
