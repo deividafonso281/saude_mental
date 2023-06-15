@@ -1,21 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required String title});
+import '../../providers/auth_provider.dart';
+import '../../utils/router.dart';
+
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   final TextEditingController _emailTextController = TextEditingController();
   final TextEditingController _passwordTextContoller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context);
+
     return Scaffold(
+      key: _scaffoldKey,
       body: Center(
         child: Form(
           key: _formKey,
@@ -43,6 +51,33 @@ class _MyHomePageState extends State<MyHomePage> {
                     labelText: "Senha",
                   ),
                 ),
+                authProvider.status == Status.Authenticating
+                    ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : ElevatedButton(
+                        child: const Text('Logar'),
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            FocusScope.of(context)
+                                .unfocus(); //to hide the keyboard - if any
+
+                            bool status =
+                                await authProvider.signInWithEmailAndPassword(
+                                    _emailTextController.text,
+                                    _passwordTextContoller.text);
+
+                            if (!status) {
+                              _scaffoldKey.currentState!.showBottomSheet(
+                                  (context) => const SnackBar(
+                                      content: Text(
+                                          "Aconteceu algum erro durante o login")));
+                            } else {
+                              Navigator.of(context).pushReplacementNamed(
+                                  Routes.cadastro_especialist_screen);
+                            }
+                          }
+                        }),
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
