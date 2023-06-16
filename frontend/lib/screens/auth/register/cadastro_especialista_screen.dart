@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:frontend/providers/auth_provider.dart';
+import 'package:provider/provider.dart';
 
 class CadastroTerapeuta extends StatefulWidget {
   const CadastroTerapeuta({
@@ -46,6 +48,8 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context);
+
     return Scaffold(
         appBar: AppBar(),
         body: Center(
@@ -184,6 +188,7 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
                       ),
                       ElevatedButton(
                         onPressed: () {
+                          authProvider.signOut();
                           if (_formKey.currentState!.validate()) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('Processing Data')),

@@ -23,74 +23,74 @@ class _LoginScreenState extends State<LoginScreen> {
     final authProvider = Provider.of<AuthProvider>(context);
 
     return Scaffold(
-      key: _scaffoldKey,
       body: Center(
-        child: Form(
-          key: _formKey,
-          child: Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Icon(
-                  Icons.diversity_1_outlined,
-                  size: 160,
-                  color: Colors.blue,
-                ),
-                const SizedBox(height: 18),
-                TextFormField(
-                  controller: _emailTextController,
-                  decoration: const InputDecoration(
-                    labelText: "E-mail",
+        child: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.diversity_1_outlined,
+                    size: 160,
+                    color: Colors.blue,
                   ),
-                ),
-                TextFormField(
-                  controller: _passwordTextContoller,
-                  decoration: const InputDecoration(
-                    labelText: "Senha",
+                  const SizedBox(height: 18),
+                  TextFormField(
+                    controller: _emailTextController,
+                    decoration: const InputDecoration(
+                      labelText: "E-mail",
+                    ),
                   ),
-                ),
-                authProvider.status == Status.Authenticating
-                    ? const Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : ElevatedButton(
-                        child: const Text('Logar'),
-                        onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
-                            FocusScope.of(context)
-                                .unfocus(); //to hide the keyboard - if any
+                  TextFormField(
+                    controller: _passwordTextContoller,
+                    decoration: const InputDecoration(
+                      labelText: "Senha",
+                    ),
+                  ),
+                  const SizedBox(height: 18),
+                  authProvider.status == Status.Authenticating
+                      ? const Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : ElevatedButton(
+                          child: const Text('Logar'),
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              FocusScope.of(context)
+                                  .unfocus(); //to hide the keyboard - if any
 
-                            bool status =
-                                await authProvider.signInWithEmailAndPassword(
-                                    _emailTextController.text,
-                                    _passwordTextContoller.text);
+                              bool status =
+                                  await authProvider.signInWithEmailAndPassword(
+                                      _emailTextController.text,
+                                      _passwordTextContoller.text);
 
-                            if (!status) {
-                              _scaffoldKey.currentState!.showBottomSheet(
-                                  (context) => const SnackBar(
-                                      content: Text(
-                                          "Aconteceu algum erro durante o login")));
-                            } else {
-                              Navigator.of(context).pushReplacementNamed(
-                                  Routes.cadastro_especialist_screen);
+                              if (!status) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Acesso Negado'),
+                                  ),
+                                );
+                              } else {
+                                Navigator.of(context).pushReplacementNamed(
+                                    Routes.cadastro_especialist_screen);
+                              }
                             }
-                          }
-                        }),
-                ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Processing Data')),
-                      );
-                    }
-                  },
-                  child: const Text('Logar'),
-                ),
-                const SizedBox(height: 18),
-                const Text("Se não esta cadastrado, cadastre-se"),
-              ],
+                          }),
+                  const SizedBox(height: 18),
+                  const Text("Se não esta cadastrado"),
+                  TextButton(
+                    child: const Text("Registre-se"),
+                    onPressed: () {
+                      Navigator.of(context).restorablePushNamed(
+                          Routes.intermediete_register_screen);
+                    },
+                  )
+                ],
+              ),
             ),
           ),
         ),

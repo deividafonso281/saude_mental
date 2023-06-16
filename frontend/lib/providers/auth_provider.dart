@@ -24,21 +24,21 @@ status for your UI or widgets to listen.
 
 class AuthProvider extends ChangeNotifier {
   //Firebase Auth object
-  late FirebaseAuth _auth;
+  late FirebaseAuth auth;
 
   //Default status
   Status _status = Status.Uninitialized;
 
   Status get status => _status;
 
-  Stream<UserModel> get user => _auth.authStateChanges().map(_userFromFirebase);
+  Stream<UserModel> get user => auth.authStateChanges().map(_userFromFirebase);
 
   AuthProvider() {
     //initialise object
-    _auth = FirebaseAuth.instance;
+    auth = FirebaseAuth.instance;
 
     //listener for authentication changes such as user sign in and sign out
-    _auth.authStateChanges().listen(onAuthStateChanged);
+    auth.authStateChanges().listen(onAuthStateChanged);
   }
 
   //Create user object based on the given User
@@ -72,7 +72,7 @@ class AuthProvider extends ChangeNotifier {
     try {
       _status = Status.Registering;
       notifyListeners();
-      final UserCredential result = await _auth.createUserWithEmailAndPassword(
+      final UserCredential result = await auth.createUserWithEmailAndPassword(
           email: email, password: password);
 
       return _userFromFirebase(result.user);
@@ -89,7 +89,7 @@ class AuthProvider extends ChangeNotifier {
     try {
       _status = Status.Authenticating;
       notifyListeners();
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
+      await auth.signInWithEmailAndPassword(email: email, password: password);
       return true;
     } catch (e) {
       print("Error on the sign in = " + e.toString());
@@ -101,12 +101,12 @@ class AuthProvider extends ChangeNotifier {
 
   //Method to handle password reset email
   Future<void> sendPasswordResetEmail(String email) async {
-    await _auth.sendPasswordResetEmail(email: email);
+    await auth.sendPasswordResetEmail(email: email);
   }
 
   //Method to handle user signing out
   Future signOut() async {
-    _auth.signOut();
+    auth.signOut();
     _status = Status.Unauthenticated;
     notifyListeners();
     return Future.delayed(Duration.zero);

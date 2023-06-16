@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 class AuthWidgetBuilder extends StatelessWidget {
   const AuthWidgetBuilder({required Key key, required this.builder})
       : super(key: key);
+
   final Widget Function(BuildContext, AsyncSnapshot<UserModel>) builder;
 
   @override
@@ -23,7 +24,7 @@ class AuthWidgetBuilder extends StatelessWidget {
       stream: authService.user,
       builder: (BuildContext context, AsyncSnapshot<UserModel> snapshot) {
         final UserModel? user = snapshot.data;
-        if (user != null) {
+        if (user != null && authService.status == Status.Authenticated) {
           /*
           * For any other Provider services that rely on user data can be
           * added to the following MultiProvider list.
