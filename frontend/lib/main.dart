@@ -16,7 +16,6 @@ Future<void> initializeDefault() async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  print("----- App init ------");
   runApp(
     /*
       * MultiProvider for top services that do not depends on any runtime values
