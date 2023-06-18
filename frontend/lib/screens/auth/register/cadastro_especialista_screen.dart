@@ -1,8 +1,12 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:frontend/providers/database/firebase/firestore_general%20_dao.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:frontend/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
+
+import '../../../models/auth_model.dart';
+import '../../../models/user_model.dart';
+import '../../../providers/auth/auth_provider.dart';
 
 class CadastroTerapeuta extends StatefulWidget {
   const CadastroTerapeuta({
@@ -187,12 +191,29 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
                         obscureText: true,
                       ),
                       ElevatedButton(
-                        onPressed: () {
-                          authProvider.signOut();
+                        onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('Processing Data')),
                             );
+
+                            AuthModel authModel =
+                                await authProvider.registerWithEmailAndPassword(
+                                    _emailTextController.text,
+                                    _passwordTextContoller.text);
+
+                            final firestoreDao =
+                                FirestoreDao<UserModel>(uid: authModel.uid);
+
+                            await firestoreDao.setData(UserModel(
+                              id: authModel.uid,
+                              email: _emailTextController.text,
+                              fullName: _nameTextContoller.text,
+                              gender: _selectedGender ?? "",
+                              phoneNumber: _telefoneTextController.text,
+                            ));
+
+                            authProvider.signOut();
                           }
                         },
                         child: const Text('Cadastrar'),

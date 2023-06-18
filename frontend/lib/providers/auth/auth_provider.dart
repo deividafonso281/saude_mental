@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:frontend/models/user_model.dart';
+import 'package:frontend/models/auth_model.dart';
+import 'package:frontend/providers/database/firebase/firestore_general%20_dao.dart';
 
 enum Status {
   Uninitialized,
@@ -31,7 +32,7 @@ class AuthProvider extends ChangeNotifier {
 
   Status get status => _status;
 
-  Stream<UserModel> get user => auth.authStateChanges().map(_userFromFirebase);
+  Stream<AuthModel> get user => auth.authStateChanges().map(_userFromFirebase);
 
   AuthProvider() {
     //initialise object
@@ -42,17 +43,12 @@ class AuthProvider extends ChangeNotifier {
   }
 
   //Create user object based on the given User
-  UserModel _userFromFirebase(User? user) {
+  AuthModel _userFromFirebase(User? user) {
     if (user == null) {
-      return UserModel(uid: 'null');
+      return AuthModel(uid: 'null');
     }
 
-    return UserModel(
-        uid: user.uid,
-        email: user.email,
-        fullName: user.displayName,
-        phoneNumber: user.phoneNumber,
-        photoURL: user.photoURL);
+    return AuthModel(uid: user.uid, email: user.email);
   }
 
   //Method to detect live auth changes such as user sign in and sign out
@@ -67,11 +63,12 @@ class AuthProvider extends ChangeNotifier {
   }
 
   //Method for new user registration using email and password
-  Future<UserModel> registerWithEmailAndPassword(
+  Future<AuthModel> registerWithEmailAndPassword(
       String email, String password) async {
     try {
       _status = Status.Registering;
       notifyListeners();
+
       final UserCredential result = await auth.createUserWithEmailAndPassword(
           email: email, password: password);
 
@@ -80,7 +77,7 @@ class AuthProvider extends ChangeNotifier {
       print("Error on the new user registration = " + e.toString());
       _status = Status.Unauthenticated;
       notifyListeners();
-      return UserModel(fullName: 'Null', uid: 'null');
+      return AuthModel(uid: 'null');
     }
   }
 
