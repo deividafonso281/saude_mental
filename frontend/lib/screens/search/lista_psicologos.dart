@@ -11,10 +11,16 @@ class CardList extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<CardList> createState() => _CardListState();
+  State<CardList> createState() => CardListState();
 }
 
-class _CardListState extends State<CardList> {
+class CardListState extends State<CardList> {
+
+  final String checkEmptyMessage = "Nenhum resultado foi encontrado";
+
+  String? checkIsEmpty(List? cardList) {
+    return (cardList == null || cardList.isEmpty) ? checkEmptyMessage : null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +33,14 @@ class _CardListState extends State<CardList> {
       String distPsi = item[3];
       cardList.add(
         MyCard(image: image, text1: nomePsi, text2: biosPsi, text3: distPsi),
+      );
+    }
+
+    if (checkIsEmpty(cardList) == checkEmptyMessage) {
+      return const Text(
+        "Nenhum resultado foi encontrado para a sua busca",
+        textAlign: TextAlign.center,
+        style: TextStyle(fontSize: 18),
       );
     }
 
