@@ -1,0 +1,25 @@
+name: Pagina de cadastro de pacientes tests
+
+on:
+  push:
+    branches:
+      - 2-feature-construir-a-tela-de-cadastro-dos-pacientes
+
+jobs:
+  Cadastro_Pacientes_Test:
+    runs-on: macos-latest
+    env:
+      working-directory: ./frontend
+    steps:
+      - uses: actions/checkout@v2.3.4
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: "stable"
+
+      - name: "Analyze"
+        run: flutter pub get && flutter analyze
+        working-directory: ${{env.working-directory}}
+
+      - name: "Run tests"
+        run: flutter test test/cadastro_paciente_test.dart
+        working-directory: ${{env.working-directory}}
