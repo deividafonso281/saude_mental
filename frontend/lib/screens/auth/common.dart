@@ -17,6 +17,6 @@ String? checkIsEqual(String? campo, TextEditingController controller) {
 
 String? checkPasswordSize(String? campo) {
   return (campo != null && campo.length > passwordSize)
-      ? checkLengthMessage
-      : null;
+      ? null
+      : checkLengthMessage;
 }
