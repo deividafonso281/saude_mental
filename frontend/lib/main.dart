@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'app_builder.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
+import 'cadastro_paciente.dart';
 
 FirebaseApp? app;
 
