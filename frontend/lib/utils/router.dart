@@ -3,7 +3,7 @@ import 'package:frontend/screens/auth/register/intermediete_register_screen.dart
 import 'package:frontend/screens/auth/login_screen.dart';
 import 'package:frontend/screens/search/busca_psicologo_screen.dart';
 
-import '../screens/auth/register/cadastro_especialista_screen.dart';
+import '../screens/auth/register/register_screen.dart';
 
 class Routes {
   Routes._(); //this is to prevent anyone from instantiate this object

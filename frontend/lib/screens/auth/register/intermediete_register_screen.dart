@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:frontend/models/auth_model.dart';
 
 import '../../../utils/router.dart';
@@ -25,7 +23,7 @@ class IntermedieteRegisterScreen extends StatelessWidget {
                         Routes.cadastro_especialist_screen,
                         arguments: UserType.Especialist.toShortString());
                   },
-                  child: Text("Especialista"),
+                  child: const Text("Especialista"),
                 ),
               ),
               const SizedBox(width: 18),

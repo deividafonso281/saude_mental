@@ -3,7 +3,6 @@ import 'package:frontend/providers/auth/auth_provider.dart';
 import 'package:provider/provider.dart';
 import 'app_builder.dart';
 import 'package:flutter/material.dart';
-import 'cadastro_paciente.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

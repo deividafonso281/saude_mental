@@ -4,6 +4,7 @@ import 'package:frontend/models/especialist_model.dart';
 import 'package:frontend/providers/database/firebase/firestore_general%20_dao.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:frontend/screens/auth/common.dart';
 
 import '../../../models/auth_model.dart';
 import '../../../models/user_model.dart';
@@ -20,9 +21,6 @@ class CadastroTerapeuta extends StatefulWidget {
 
 class CadastroTerapeutaState extends State<CadastroTerapeuta> {
   final _formKey = GlobalKey<FormState>();
-
-  final checkEmptyMessage = "O campo esta vazio";
-  final checkEqualMessage = "Os valores são diferentes";
 
   File? _image;
   String? _selectedGender;
@@ -43,14 +41,6 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
     setState(() {
       _image = File(pickedFile!.path);
     });
-  }
-
-  String? checkIsEmpty(String? campo) {
-    return (campo == null || campo.isEmpty) ? checkEmptyMessage : null;
-  }
-
-  String? checkIsEqual(String? campo, TextEditingController controller) {
-    return campo != controller.text ? checkEqualMessage : null;
   }
 
   @override

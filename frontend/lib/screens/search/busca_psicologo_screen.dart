@@ -109,6 +109,12 @@ class _SearchScreenState extends State<SearchScreen> {
                           }),
                   const SizedBox(height: 18),
                   CardList(items: items),
+                  ElevatedButton(
+                    onPressed: () {
+                      authProvider.signOut();
+                    },
+                    child: const Text("Sair"),
+                  ),
                 ],
               ),
             ),

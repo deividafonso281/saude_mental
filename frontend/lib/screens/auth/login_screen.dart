@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/providers/auth/auth_provider.dart';
 import 'package:frontend/utils/router.dart';
 import 'package:provider/provider.dart';
+import 'package:frontend/screens/auth/common.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -48,6 +49,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     decoration: const InputDecoration(
                       labelText: "Senha",
                     ),
+                    validator: (campo) => checkPasswordSize(campo),
+                    obscureText: true,
                   ),
                   const SizedBox(height: 18),
                   authProvider.status == Status.Authenticating
