@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/providers/auth/auth_provider.dart';
 import 'package:frontend/screens/auth/register/cadastro_especialista_screen.dart';
+import 'package:frontend/screens/search/busca_psicologo_screen.dart';
 import 'package:frontend/screens/auth/login_screen.dart';
 import 'package:frontend/utils/router.dart';
 import 'package:provider/provider.dart';
@@ -26,8 +27,8 @@ class MyApp extends StatelessWidget {
               if (userSnapshot.connectionState == ConnectionState.active) {
                 if (userSnapshot.hasData &&
                     authProvider.status == Status.Authenticated) {
-                  return userSnapshot.data?.userType == UserType.Especialist
-                      ? const CadastroTerapeuta()
+                  return userSnapshot.data?.userType != UserType.Especialist
+                      ? const SearchScreen()
                       : const CadastroTerapeuta();
                 } else {
                   return const LoginScreen();
