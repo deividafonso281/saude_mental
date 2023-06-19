@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "294111308206",
+    "project_id": "saude-mental-6f170",
+    "storage_bucket": "saude-mental-6f170.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:294111308206:android:c38cbbbaa8d39733e9003f",
+        "android_client_info": {
+          "package_name": "com.saudemental.frontend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "294111308206-2ptuplpj9i98ohiv03f4ofvfnmblq0c3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKew0IGP0fuSS_sPwckuGGIEzknXs3d60"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "294111308206-2ptuplpj9i98ohiv03f4ofvfnmblq0c3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "294111308206-7951vchq2h64bted88of6uhbgbqdq3mo.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.frontend"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
