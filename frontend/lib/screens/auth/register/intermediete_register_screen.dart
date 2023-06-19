@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/models/auth_model.dart';
 
 import '../../../utils/router.dart';
 
@@ -19,7 +20,8 @@ class IntermedieteRegisterScreen extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).restorablePushNamed(
-                        Routes.cadastro_especialist_screen);
+                        Routes.cadastro_especialist_screen,
+                        arguments: UserType.Especialist.toShortString());
                   },
                   child: const Text("Especialista"),
                 ),
@@ -27,8 +29,12 @@ class IntermedieteRegisterScreen extends StatelessWidget {
               const SizedBox(width: 18),
               Expanded(
                 child: ElevatedButton(
-                  onPressed: () {},
-                  child: const Text("Paciente"),
+                  onPressed: () {
+                    Navigator.of(context).restorablePushNamed(
+                        Routes.cadastro_especialist_screen,
+                        arguments: UserType.Patient.toShortString());
+                  },
+                  child: Text("Paciente"),
                 ),
               ),
             ],

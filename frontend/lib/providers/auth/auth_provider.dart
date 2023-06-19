@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:frontend/models/user_model.dart';
+import 'package:frontend/models/auth_model.dart';
+import 'package:frontend/providers/database/firebase/firestore_general%20_dao.dart';
 
 enum Status {
   Uninitialized,
@@ -31,7 +32,7 @@ class AuthProvider extends ChangeNotifier {
 
   Status get status => _status;
 
-  Stream<UserModel> get user => auth.authStateChanges().map(userFromFirebase);
+  Stream<AuthModel> get user => auth.authStateChanges().map(_userFromFirebase);
 
   AuthProvider() {
     //initialise object
@@ -42,17 +43,14 @@ class AuthProvider extends ChangeNotifier {
   }
 
   //Create user object based on the given User
-  UserModel userFromFirebase(User? user) {
+  AuthModel _userFromFirebase(User? user) {
     if (user == null) {
-      return UserModel(uid: 'null');
+      return AuthModel(uid: 'null');
     }
 
-    return UserModel(
-        uid: user.uid,
-        email: user.email,
-        fullName: user.displayName,
-        phoneNumber: user.phoneNumber,
-        photoURL: user.photoURL);
+    UserType userType = stringToUserType(user.displayName ?? "");
+
+    return AuthModel(uid: user.uid, email: user.email, userType: userType);
   }
 
   //Method to detect live auth changes such as user sign in and sign out
@@ -60,27 +58,34 @@ class AuthProvider extends ChangeNotifier {
     if (firebaseUser == null) {
       _status = Status.Unauthenticated;
     } else {
-      userFromFirebase(firebaseUser);
+      _userFromFirebase(firebaseUser);
       _status = Status.Authenticated;
     }
     notifyListeners();
   }
 
   //Method for new user registration using email and password
-  Future<UserModel> registerWithEmailAndPassword(
-      String email, String password) async {
+  Future<AuthModel> registerWithEmailPasswordAndUserType(
+      String email, String password, UserType userType) async {
     try {
       _status = Status.Registering;
       notifyListeners();
+
       final UserCredential result = await auth.createUserWithEmailAndPassword(
           email: email, password: password);
 
-      return userFromFirebase(result.user);
+      String? userTypeString = userType.toShortString();
+
+      await result.user?.updateDisplayName(userTypeString);
+
+      print("${result.user!.displayName} ++++++++++++++++");
+
+      return _userFromFirebase(result.user);
     } catch (e) {
       print("Error on the new user registration = " + e.toString());
       _status = Status.Unauthenticated;
       notifyListeners();
-      return UserModel(fullName: 'Null', uid: 'null');
+      return AuthModel(uid: 'null');
     }
   }
 

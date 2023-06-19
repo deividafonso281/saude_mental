@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../providers/auth_provider.dart';
+import '../../../providers/auth/auth_provider.dart';
 import 'package:frontend/screens/search/lista_psicologos.dart';
-
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -71,7 +70,8 @@ class _SearchScreenState extends State<SearchScreen> {
                         _selectedSpecialization = newValue ?? '';
                       });
                     },
-                    items: <String>['Especialização', '1', '2', '3'].map<DropdownMenuItem<String>>((String value) {
+                    items: <String>['Especialização', '1', '2', '3']
+                        .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
                         child: Text(value),
@@ -81,34 +81,40 @@ class _SearchScreenState extends State<SearchScreen> {
                   const SizedBox(height: 18),
                   authProvider.status == Status.Authenticating
                       ? const Center(
-                    child: CircularProgressIndicator(),
-                  )
+                          child: CircularProgressIndicator(),
+                        )
                       : ElevatedButton(
-                      child: const Text('Pesquisar'),
-                      onPressed: () async {
-                        // if (_formKey.currentState!.validate()) {
-                        //   FocusScope.of(context)
-                        //       .unfocus(); //to hide the keyboard - if any
-                        //
-                        //   bool status =
-                        //   await authProvider.signInWithEmailAndPassword(
-                        //       _emailTextController.text,
-                        //       _passwordTextContoller.text);
-                        //
-                        //   if (!status) {
-                        //     ScaffoldMessenger.of(context).showSnackBar(
-                        //       const SnackBar(
-                        //         content: Text('Acesso Negado'),
-                        //       ),
-                        //     );
-                        //   } else {
-                        //     Navigator.of(context).pushReplacementNamed(
-                        //         Routes.cadastro_especialist_screen);
-                        //   }
-                        // }
-                      }),
+                          child: const Text('Pesquisar'),
+                          onPressed: () async {
+                            // if (_formKey.currentState!.validate()) {
+                            //   FocusScope.of(context)
+                            //       .unfocus(); //to hide the keyboard - if any
+                            //
+                            //   bool status =
+                            //   await authProvider.signInWithEmailAndPassword(
+                            //       _emailTextController.text,
+                            //       _passwordTextContoller.text);
+                            //
+                            //   if (!status) {
+                            //     ScaffoldMessenger.of(context).showSnackBar(
+                            //       const SnackBar(
+                            //         content: Text('Acesso Negado'),
+                            //       ),
+                            //     );
+                            //   } else {
+                            //     Navigator.of(context).pushReplacementNamed(
+                            //         Routes.cadastro_especialist_screen);
+                            //   }
+                            // }
+                          }),
                   const SizedBox(height: 18),
                   CardList(items: items),
+                  ElevatedButton(
+                    onPressed: () {
+                      authProvider.signOut();
+                    },
+                    child: const Text("Sair"),
+                  ),
                 ],
               ),
             ),

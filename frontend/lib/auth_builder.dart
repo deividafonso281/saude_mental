@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/models/user_model.dart';
-import 'package:frontend/providers/auth_provider.dart';
+import 'package:frontend/models/auth_model.dart';
+import 'package:frontend/providers/auth/auth_provider.dart';
 import 'package:provider/provider.dart';
 
 /*
@@ -15,15 +15,15 @@ class AuthWidgetBuilder extends StatelessWidget {
   const AuthWidgetBuilder({required Key key, required this.builder})
       : super(key: key);
 
-  final Widget Function(BuildContext, AsyncSnapshot<UserModel>) builder;
+  final Widget Function(BuildContext, AsyncSnapshot<AuthModel>) builder;
 
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthProvider>(context, listen: false);
-    return StreamBuilder<UserModel>(
+    return StreamBuilder<AuthModel>(
       stream: authService.user,
-      builder: (BuildContext context, AsyncSnapshot<UserModel> snapshot) {
-        final UserModel? user = snapshot.data;
+      builder: (BuildContext context, AsyncSnapshot<AuthModel> snapshot) {
+        final AuthModel? user = snapshot.data;
         if (user != null && authService.status == Status.Authenticated) {
           /*
           * For any other Provider services that rely on user data can be
@@ -32,7 +32,7 @@ class AuthWidgetBuilder extends StatelessWidget {
            */
           return MultiProvider(
             providers: [
-              Provider<UserModel>.value(value: user),
+              Provider<AuthModel>.value(value: user),
             ],
             child: builder(context, snapshot),
           );

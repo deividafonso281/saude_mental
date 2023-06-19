@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/screens/auth/common.dart';
+import 'package:frontend/providers/auth/auth_provider.dart';
+import 'package:frontend/utils/router.dart';
 import 'package:provider/provider.dart';
-
-import '../../providers/auth_provider.dart';
-import '../../utils/router.dart';
+import 'package:frontend/screens/auth/common.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,7 +13,6 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   final TextEditingController _emailTextController = TextEditingController();
   final TextEditingController _passwordTextContoller = TextEditingController();

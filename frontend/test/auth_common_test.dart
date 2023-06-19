@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/screens/auth/common.dart';
-import 'package:frontend/screens/auth/register/cadastro_especialista_screen.dart';
+import 'package:frontend/screens/auth/register/register_screen.dart';
 import 'package:test/test.dart';
 
 void main() {
