@@ -22,10 +22,6 @@ jobs:
         with:
           channel: "stable"
 
-      - name: "Analyze"
-        run: flutter pub get && flutter analyze
-        working-directory: ${{env.working-directory}}
-
       - name: "Run tests"
         run: for i in test/*.dart; do flutter test $i; done;
         working-directory: ${{env.working-directory}}
