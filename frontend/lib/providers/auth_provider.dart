@@ -31,7 +31,7 @@ class AuthProvider extends ChangeNotifier {
 
   Status get status => _status;
 
-  Stream<UserModel> get user => auth.authStateChanges().map(_userFromFirebase);
+  Stream<UserModel> get user => auth.authStateChanges().map(userFromFirebase);
 
   AuthProvider() {
     //initialise object
@@ -42,7 +42,7 @@ class AuthProvider extends ChangeNotifier {
   }
 
   //Create user object based on the given User
-  UserModel _userFromFirebase(User? user) {
+  UserModel userFromFirebase(User? user) {
     if (user == null) {
       return UserModel(uid: 'null');
     }
@@ -60,7 +60,7 @@ class AuthProvider extends ChangeNotifier {
     if (firebaseUser == null) {
       _status = Status.Unauthenticated;
     } else {
-      _userFromFirebase(firebaseUser);
+      userFromFirebase(firebaseUser);
       _status = Status.Authenticated;
     }
     notifyListeners();
@@ -75,7 +75,7 @@ class AuthProvider extends ChangeNotifier {
       final UserCredential result = await auth.createUserWithEmailAndPassword(
           email: email, password: password);
 
-      return _userFromFirebase(result.user);
+      return userFromFirebase(result.user);
     } catch (e) {
       print("Error on the new user registration = " + e.toString());
       _status = Status.Unauthenticated;

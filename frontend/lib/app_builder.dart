@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/providers/auth_provider.dart';
-import 'package:frontend/screens/auth/register/cadastro_especialista_screen.dart';
+import 'package:frontend/screens/search/busca_psicologo_screen.dart';
 import 'package:frontend/screens/auth/login_screen.dart';
 import 'package:frontend/utils/router.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
               if (userSnapshot.connectionState == ConnectionState.active) {
                 return userSnapshot.hasData &&
                         authProvider.status == Status.Authenticated
-                    ? const CadastroTerapeuta()
+                    ? const SearchScreen()
                     : const LoginScreen();
               }
 

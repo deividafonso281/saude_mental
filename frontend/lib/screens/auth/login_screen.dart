@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/screens/auth/common.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/auth_provider.dart';
@@ -50,6 +51,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     decoration: const InputDecoration(
                       labelText: "Senha",
                     ),
+                    validator: (campo) => checkPasswordSize(campo),
+                    obscureText: true,
                   ),
                   const SizedBox(height: 18),
                   authProvider.status == Status.Authenticating
