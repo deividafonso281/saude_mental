@@ -1,13 +1,13 @@
 // Importing cloud_firestore only for DartDoc intellisense
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:frontend/models/especialist_model.dart';
 
-import '../health_service_model.dart';
 import '../user_model.dart';
 import 'map_converter_interface.dart';
 
 class MapConverters {
   static final Map<Type, MapConverter> _mapConverterMap = {
-    HealthServiceModel: HealthServiceModelConverter(),
+    EspecialistModel: EspecialistModelConverter(),
     UserModel: UserModelConverter(),
   };
 

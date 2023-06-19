@@ -1,10 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/models/health_service_model.dart';
 import 'package:frontend/models/auth_model.dart';
-import 'package:frontend/models/user_model.dart';
 import 'package:frontend/providers/auth/auth_provider.dart';
-import 'package:frontend/providers/database/firebase/firestore_general%20_dao.dart';
 import 'package:provider/provider.dart';
 
 /*
@@ -36,9 +32,6 @@ class AuthWidgetBuilder extends StatelessWidget {
            */
           return MultiProvider(
             providers: [
-              Provider<FirestoreDao<UserModel>>(
-                create: (context) => FirestoreDao<UserModel>(uid: user.uid),
-              ),
               Provider<AuthModel>.value(value: user),
             ],
             child: builder(context, snapshot),

@@ -48,7 +48,10 @@ class AuthProvider extends ChangeNotifier {
       return AuthModel(uid: 'null');
     }
 
-    return AuthModel(uid: user.uid, email: user.email);
+    UserType userType =
+        user.displayName == "Patient" ? UserType.Patient : UserType.Especialist;
+
+    return AuthModel(uid: user.uid, email: user.email, userType: userType);
   }
 
   //Method to detect live auth changes such as user sign in and sign out
@@ -63,14 +66,19 @@ class AuthProvider extends ChangeNotifier {
   }
 
   //Method for new user registration using email and password
-  Future<AuthModel> registerWithEmailAndPassword(
-      String email, String password) async {
+  Future<AuthModel> registerWithEmailPasswordAndUserType(
+      String email, String password, UserType userType) async {
     try {
       _status = Status.Registering;
       notifyListeners();
 
       final UserCredential result = await auth.createUserWithEmailAndPassword(
           email: email, password: password);
+
+      String? userTypeString =
+          userType == UserType.Patient ? "Patient" : "Especialist";
+
+      await result.user?.updateDisplayName(userTypeString);
 
       return _userFromFirebase(result.user);
     } catch (e) {

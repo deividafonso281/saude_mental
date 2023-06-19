@@ -29,7 +29,7 @@ class UserModel extends BaseModel {
   String id;
   String email;
   String fullName;
-  String gender;
+  Gender gender;
   String phoneNumber;
 
   UserModel(
@@ -39,4 +39,42 @@ class UserModel extends BaseModel {
       required this.gender,
       required this.phoneNumber})
       : super(id: id);
+}
+
+enum Gender {
+  Female,
+  NonBinary,
+  Male,
+}
+
+extension ParseToString on Gender {
+  String toShortString() {
+    switch (this) {
+      case Gender.Female:
+        return "Feminino";
+      case Gender.NonBinary:
+        return "Não binario";
+      case Gender.Male:
+        return "Masculino";
+      default:
+        return "";
+    }
+  }
+}
+
+List<String> genderToStringList() {
+  return Gender.values.map((esp) => esp.toShortString()).toList();
+}
+
+Gender stringToGender(String gender) {
+  switch (gender) {
+    case "Feminino":
+      return Gender.Female;
+    case "Masculino":
+      return Gender.Male;
+    case "Não binario":
+      return Gender.NonBinary;
+    default:
+      return Gender.NonBinary;
+  }
 }

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:frontend/models/especialist_model.dart';
 import 'package:frontend/providers/database/firebase/firestore_general%20_dao.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -24,16 +25,18 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
   final checkEqualMessage = "Os valores são diferentes";
 
   File? _image;
-
   String? _selectedGender;
-  final List<String> _genders = ['Feminino', 'Não-Binário', 'Masculino'];
-
   final TextEditingController _nameTextContoller = TextEditingController();
   final TextEditingController _emailTextController = TextEditingController();
   final TextEditingController _passwordTextContoller = TextEditingController();
   final TextEditingController _telefoneTextController = TextEditingController();
   final TextEditingController _birthDateTextController =
       TextEditingController();
+
+  // Dados do especialista
+  String? _especialization;
+  final TextEditingController _biosTextController = TextEditingController();
+  final TextEditingController _crptTextController = TextEditingController();
 
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await ImagePicker().pickImage(source: source);
@@ -53,7 +56,8 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
-
+    final userType =
+        stringToUserType(ModalRoute.of(context)!.settings.arguments as String);
     return Scaffold(
         appBar: AppBar(),
         body: Center(
@@ -121,7 +125,7 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
                       ),
                       DropdownButtonFormField(
                         value: _selectedGender,
-                        items: _genders.map((gender) {
+                        items: genderToStringList().map((gender) {
                           return DropdownMenuItem(
                             value: gender,
                             child: Text(gender),
@@ -178,6 +182,7 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
                           return checkIsEmpty(campo);
                         },
                         obscureText: true,
+                        enabled: false,
                       ),
                       TextFormField(
                         decoration: const InputDecoration(
@@ -190,6 +195,59 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
                         },
                         obscureText: true,
                       ),
+                      userType == UserType.Especialist
+                          ? TextFormField(
+                              controller: _crptTextController,
+                              decoration: const InputDecoration(
+                                labelText: 'CRP',
+                              ),
+                              validator: (campo) {
+                                String? out = checkIsEmpty(campo);
+                                if (out != null) return out;
+                                return checkIsEqual(
+                                    campo, _passwordTextContoller);
+                              },
+                              obscureText: true,
+                            )
+                          : const SizedBox(),
+                      userType == UserType.Especialist
+                          ? DropdownButtonFormField(
+                              value: _especialization,
+                              items: especializationToStringList()
+                                  .map((especialization) {
+                                return DropdownMenuItem(
+                                  value: especialization,
+                                  child: Text(especialization),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedGender = _especialization;
+                                });
+                              },
+                              validator: (campo) {
+                                return checkIsEmpty(campo);
+                              },
+                              decoration: const InputDecoration(
+                                labelText: 'Gênero',
+                              ),
+                            )
+                          : const SizedBox(),
+                      userType == UserType.Especialist
+                          ? TextFormField(
+                              controller: _biosTextController,
+                              decoration: const InputDecoration(
+                                labelText: 'Bios',
+                              ),
+                              validator: (campo) {
+                                String? out = checkIsEmpty(campo);
+                                if (out != null) return out;
+                                return checkIsEqual(
+                                    campo, _passwordTextContoller);
+                              },
+                              obscureText: true,
+                            )
+                          : const SizedBox(),
                       ElevatedButton(
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
@@ -197,22 +255,38 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
                               const SnackBar(content: Text('Processing Data')),
                             );
 
-                            AuthModel authModel =
-                                await authProvider.registerWithEmailAndPassword(
+                            AuthModel authModel = await authProvider
+                                .registerWithEmailPasswordAndUserType(
                                     _emailTextController.text,
-                                    _passwordTextContoller.text);
+                                    _passwordTextContoller.text,
+                                    userType);
 
-                            final firestoreDao =
-                                FirestoreDao<UserModel>(uid: authModel.uid);
+                            if (userType == UserType.Patient) {
+                              final firestoreDao = FirestoreDao<UserModel>();
 
-                            await firestoreDao.setData(UserModel(
-                              id: authModel.uid,
-                              email: _emailTextController.text,
-                              fullName: _nameTextContoller.text,
-                              gender: _selectedGender ?? "",
-                              phoneNumber: _telefoneTextController.text,
-                            ));
+                              await firestoreDao.setData(UserModel(
+                                id: authModel.uid,
+                                email: _emailTextController.text,
+                                fullName: _nameTextContoller.text,
+                                gender: stringToGender(_selectedGender!),
+                                phoneNumber: _telefoneTextController.text,
+                              ));
+                            } else {
+                              final firestoreDao =
+                                  FirestoreDao<EspecialistModel>();
 
+                              await firestoreDao.setData(EspecialistModel(
+                                id: authModel.uid,
+                                email: _emailTextController.text,
+                                fullName: _nameTextContoller.text,
+                                gender: stringToGender(_selectedGender!),
+                                phoneNumber: _telefoneTextController.text,
+                                CRP: _crptTextController.text,
+                                especialization:
+                                    stringToEspscialization(_especialization!),
+                                bios: _biosTextController.text,
+                              ));
+                            }
                             authProvider.signOut();
                           }
                         },

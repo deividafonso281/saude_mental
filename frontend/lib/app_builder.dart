@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/providers/auth/auth_provider.dart';
 import 'package:frontend/screens/auth/register/cadastro_especialista_screen.dart';
@@ -23,10 +24,14 @@ class MyApp extends StatelessWidget {
           home: Consumer<AuthProvider>(
             builder: (_, authProviderRef, __) {
               if (userSnapshot.connectionState == ConnectionState.active) {
-                return userSnapshot.hasData &&
-                        authProvider.status == Status.Authenticated
-                    ? const CadastroTerapeuta()
-                    : const LoginScreen();
+                if (userSnapshot.hasData &&
+                    authProvider.status == Status.Authenticated) {
+                  return userSnapshot.data?.userType == UserType.Especialist
+                      ? const CadastroTerapeuta()
+                      : const CadastroTerapeuta();
+                } else {
+                  return const LoginScreen();
+                }
               }
 
               return const Material(
