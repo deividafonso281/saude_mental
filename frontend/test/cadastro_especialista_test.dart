@@ -28,7 +28,8 @@ void main() {
 
     test('The minimum password size text', () {
       expect(checkPasswordSize("123456"), checkLengthMessage);
-      expect(checkPasswordSize("12345"), null);
+      expect(checkPasswordSize("12345"), checkLengthMessage);
+      expect(checkPasswordSize(null), checkLengthMessage);
       expect(checkPasswordSize("1234567"), null);
     });
   });
