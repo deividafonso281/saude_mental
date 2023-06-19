@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:frontend/screens/auth/common.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:frontend/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
@@ -15,9 +16,6 @@ class CadastroTerapeuta extends StatefulWidget {
 
 class CadastroTerapeutaState extends State<CadastroTerapeuta> {
   final _formKey = GlobalKey<FormState>();
-
-  final checkEmptyMessage = "O campo esta vazio";
-  final checkEqualMessage = "Os valores são diferentes";
 
   File? _image;
 
@@ -36,14 +34,6 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
     setState(() {
       _image = File(pickedFile!.path);
     });
-  }
-
-  String? checkIsEmpty(String? campo) {
-    return (campo == null || campo.isEmpty) ? checkEmptyMessage : null;
-  }
-
-  String? checkIsEqual(String? campo, TextEditingController controller) {
-    return campo != controller.text ? checkEqualMessage : null;
   }
 
   @override
