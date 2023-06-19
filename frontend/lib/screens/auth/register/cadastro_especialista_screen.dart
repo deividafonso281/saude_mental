@@ -55,9 +55,17 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context);
-    final userType =
-        stringToUserType(ModalRoute.of(context)!.settings.arguments as String);
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final screenRouteArgs = ModalRoute.of(context)!.settings.arguments;
+    final UserType? userType;
+
+    if (screenRouteArgs == null) {
+      final authModel = Provider.of<AuthModel>(context);
+      userType = authModel.userType;
+    } else {
+      userType = stringToUserType(screenRouteArgs as String);
+    }
+
     return Scaffold(
         appBar: AppBar(),
         body: Center(
@@ -182,7 +190,6 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
                           return checkIsEmpty(campo);
                         },
                         obscureText: true,
-                        enabled: false,
                       ),
                       TextFormField(
                         decoration: const InputDecoration(
@@ -202,12 +209,8 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
                                 labelText: 'CRP',
                               ),
                               validator: (campo) {
-                                String? out = checkIsEmpty(campo);
-                                if (out != null) return out;
-                                return checkIsEqual(
-                                    campo, _passwordTextContoller);
+                                return checkIsEmpty(campo);
                               },
-                              obscureText: true,
                             )
                           : const SizedBox(),
                       userType == UserType.Especialist
@@ -240,58 +243,62 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
                                 labelText: 'Bios',
                               ),
                               validator: (campo) {
-                                String? out = checkIsEmpty(campo);
-                                if (out != null) return out;
-                                return checkIsEqual(
-                                    campo, _passwordTextContoller);
+                                return checkIsEmpty(campo);
                               },
-                              obscureText: true,
                             )
                           : const SizedBox(),
-                      ElevatedButton(
-                        onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Processing Data')),
-                            );
+                      authProvider.status == Status.Authenticated
+                          ? ElevatedButton(
+                              onPressed: () async {
+                                if (_formKey.currentState!.validate()) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text('Processing Data')),
+                                  );
 
-                            AuthModel authModel = await authProvider
-                                .registerWithEmailPasswordAndUserType(
-                                    _emailTextController.text,
-                                    _passwordTextContoller.text,
-                                    userType);
+                                  AuthModel authModel = await authProvider
+                                      .registerWithEmailPasswordAndUserType(
+                                          _emailTextController.text,
+                                          _passwordTextContoller.text,
+                                          userType!);
 
-                            if (userType == UserType.Patient) {
-                              final firestoreDao = FirestoreDao<UserModel>();
+                                  if (userType == UserType.Patient) {
+                                    final firestoreDao =
+                                        FirestoreDao<UserModel>();
 
-                              await firestoreDao.setData(UserModel(
-                                id: authModel.uid,
-                                email: _emailTextController.text,
-                                fullName: _nameTextContoller.text,
-                                gender: stringToGender(_selectedGender!),
-                                phoneNumber: _telefoneTextController.text,
-                              ));
-                            } else {
-                              final firestoreDao =
-                                  FirestoreDao<EspecialistModel>();
+                                    await firestoreDao.setData(UserModel(
+                                      id: authModel.uid,
+                                      email: _emailTextController.text,
+                                      fullName: _nameTextContoller.text,
+                                      gender: stringToGender(_selectedGender!),
+                                      phoneNumber: _telefoneTextController.text,
+                                    ));
+                                  } else {
+                                    final firestoreDao =
+                                        FirestoreDao<EspecialistModel>();
 
-                              await firestoreDao.setData(EspecialistModel(
-                                id: authModel.uid,
-                                email: _emailTextController.text,
-                                fullName: _nameTextContoller.text,
-                                gender: stringToGender(_selectedGender!),
-                                phoneNumber: _telefoneTextController.text,
-                                CRP: _crptTextController.text,
-                                especialization:
-                                    stringToEspscialization(_especialization!),
-                                bios: _biosTextController.text,
-                              ));
-                            }
-                            authProvider.signOut();
-                          }
-                        },
-                        child: const Text('Cadastrar'),
-                      ),
+                                    await firestoreDao.setData(EspecialistModel(
+                                      id: authModel.uid,
+                                      email: _emailTextController.text,
+                                      fullName: _nameTextContoller.text,
+                                      gender: stringToGender(_selectedGender!),
+                                      phoneNumber: _telefoneTextController.text,
+                                      CRP: _crptTextController.text,
+                                      especialization: stringToEspscialization(
+                                          _especialization!),
+                                      bios: _biosTextController.text,
+                                    ));
+                                  }
+                                }
+                              },
+                              child: const Text('Cadastrar'),
+                            )
+                          : ElevatedButton(
+                              onPressed: () {
+                                authProvider.signOut();
+                              },
+                              child: const Text('sair'),
+                            ),
                     ],
                   ),
                 ),

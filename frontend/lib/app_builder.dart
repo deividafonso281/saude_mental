@@ -27,6 +27,8 @@ class MyApp extends StatelessWidget {
               if (userSnapshot.connectionState == ConnectionState.active) {
                 if (userSnapshot.hasData &&
                     authProvider.status == Status.Authenticated) {
+                  print("  ");
+                  print("Chegou aqui");
                   return userSnapshot.data?.userType != UserType.Especialist
                       ? const SearchScreen()
                       : const CadastroTerapeuta();
