@@ -237,7 +237,7 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
                               },
                             )
                           : const SizedBox(),
-                      authProvider.status == Status.Authenticated
+                      authProvider.status != Status.Authenticated
                           ? ElevatedButton(
                               onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
