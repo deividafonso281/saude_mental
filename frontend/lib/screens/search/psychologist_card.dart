@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../utils/router.dart';
+import '../schedule/psychologist_details_screen.dart';
 
 class MyCard extends StatelessWidget {
   final String image;
@@ -19,8 +19,15 @@ class MyCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).restorablePushNamed(
-        Routes.intermediete_register_screen);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const PsyDetailsScreen(
+              parametro1: "KENMA KENMA KENMA",
+              parametro2: 123,
+            ),
+          ),
+        );
       },
       child: Card(
         shape: RoundedRectangleBorder(

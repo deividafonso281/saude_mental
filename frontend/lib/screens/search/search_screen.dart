@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/auth/auth_provider.dart';
-import 'package:frontend/screens/search/lista_psicologos.dart';
+import 'package:frontend/screens/search/psychologists_list.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});

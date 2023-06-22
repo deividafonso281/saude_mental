@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/screens/search/lista_psicologos.dart';
+import 'package:frontend/screens/search/psychologists_list.dart';
 import 'package:test/test.dart';
 
 void main() {
