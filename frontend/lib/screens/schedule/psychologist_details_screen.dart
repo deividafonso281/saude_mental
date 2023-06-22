@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PsyDetailsScreen extends StatefulWidget {
   final String parametro1;
@@ -86,7 +87,7 @@ class _PsyDetailsScreenState extends State<PsyDetailsScreen> {
               Center(
                 child: ElevatedButton(
                   onPressed: () {
-                    // Faz algo
+                    _launchWhatsApp();
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -104,6 +105,19 @@ class _PsyDetailsScreenState extends State<PsyDetailsScreen> {
         ),
       ),
     );
+  }
+
+
+  void _launchWhatsApp() async {
+    const phoneNumber = '5511970342568'; // Alterar para o número do Psicologo
+    const whatsappUrl = 'whatsapp://send?phone=$phoneNumber';
+    final uri = Uri.parse(whatsappUrl);
+
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    } else {
+      throw 'Não foi possível abrir o WhatsApp.';
+    }
   }
 
 }
