@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:frontend/screens/auth/register/intermediete_register_screen.dart';
 import 'package:frontend/screens/auth/login_screen.dart';
-import 'package:frontend/screens/search/busca_psicologo_screen.dart';
+import 'package:frontend/screens/search/search_screen.dart';
+import 'package:frontend/screens/schedule/psychologist_details_screen.dart';
 
 import '../screens/auth/register/register_screen.dart';
 
@@ -13,7 +14,8 @@ class Routes {
       "cadastro_especialista_screen";
   static const String intermediete_register_screen =
       "intermediete_register_screen";
-  static const String busca_psicologo_screen = "busca_psicologo_screen";
+  static const String search_screen = "search_screen";
+  static const String psychologist_details_screen = "psychologist_details_screen";
 
   static final routes = <String, WidgetBuilder>{
     login_screen: (BuildContext context) => const LoginScreen(),
@@ -21,6 +23,7 @@ class Routes {
         const CadastroTerapeuta(),
     intermediete_register_screen: (BuildContext context) =>
         const IntermedieteRegisterScreen(),
-    busca_psicologo_screen: (BuildContext context) => const SearchScreen(),
+    search_screen: (BuildContext context) => const SearchScreen(),
+    psychologist_details_screen: (BuildContext context) => const PsyDetailsScreen(parametro1: '', parametro2: 0,),
   };
 }
