@@ -8,10 +8,21 @@ class PsyDetailsScreen extends StatefulWidget {
   const PsyDetailsScreen({Key? key, required this.parametro1, required this.parametro2}) : super(key: key);
 
   @override
-  State<PsyDetailsScreen> createState() => _PsyDetailsScreenState();
+  State<PsyDetailsScreen> createState() => PsyDetailsScreenState();
 }
 
-class _PsyDetailsScreenState extends State<PsyDetailsScreen> {
+class PsyDetailsScreenState extends State<PsyDetailsScreen> {
+
+  void _launchWhatsApp(String phoneNumber) async {
+    var whatsappUrl = 'whatsapp://send?phone=$phoneNumber';
+    final uri = Uri.parse(whatsappUrl);
+
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    } else {
+      throw 'Não foi possível abrir o WhatsApp.';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +98,7 @@ class _PsyDetailsScreenState extends State<PsyDetailsScreen> {
               Center(
                 child: ElevatedButton(
                   onPressed: () {
-                    _launchWhatsApp();
+                    _launchWhatsApp('5511970342568');
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -106,18 +117,4 @@ class _PsyDetailsScreenState extends State<PsyDetailsScreen> {
       ),
     );
   }
-
-
-  void _launchWhatsApp() async {
-    const phoneNumber = '5511970342568'; // Alterar para o número do Psicologo
-    const whatsappUrl = 'whatsapp://send?phone=$phoneNumber';
-    final uri = Uri.parse(whatsappUrl);
-
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
-    } else {
-      throw 'Não foi possível abrir o WhatsApp.';
-    }
-  }
-
 }
