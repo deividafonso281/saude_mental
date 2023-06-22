@@ -1,8 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/providers/auth/auth_provider.dart';
 import 'package:frontend/screens/auth/register/register_screen.dart';
-import 'package:frontend/screens/search/busca_psicologo_screen.dart';
+import 'package:frontend/screens/search/search_screen.dart';
 import 'package:frontend/screens/auth/login_screen.dart';
 import 'package:frontend/utils/router.dart';
 import 'package:provider/provider.dart';
