@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/screens/search/card_psicologo.dart';
+import 'package:frontend/screens/search/psychologist_card.dart';
 
 
 class CardList extends StatefulWidget {
