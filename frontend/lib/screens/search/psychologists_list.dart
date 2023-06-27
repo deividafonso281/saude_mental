@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/screens/search/psychologist_card.dart';
 
+import '../../models/especialist_model.dart';
+
 
 class CardList extends StatefulWidget {
-  final List<List<String>> items;
+  final Stream<List<EspecialistModel>> items;
 
   const CardList({
     Key? key,
@@ -15,7 +17,6 @@ class CardList extends StatefulWidget {
 }
 
 class CardListState extends State<CardList> {
-
   final String checkEmptyMessage = "Nenhum resultado foi encontrado";
 
   String? checkIsEmpty(List? cardList) {
@@ -24,28 +25,93 @@ class CardListState extends State<CardList> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> cardList = [];
+    return StreamBuilder<List<EspecialistModel>>(
+      stream: widget.items,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          List<EspecialistModel>? specialistList = snapshot.data;
+          List<Widget> cardList = [];
 
-    for (List<String> item in widget.items) {
-      String image = item[0];
-      String nomePsi = item[1];
-      String biosPsi = item[2];
-      String distPsi = item[3];
-      cardList.add(
-        MyCard(image: image, text1: nomePsi, text2: biosPsi, text3: distPsi),
-      );
-    }
+          if (specialistList == null || specialistList.isEmpty) {
+            return const Text(
+              "Nenhum resultado foi encontrado para a sua busca",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 18),
+            );
+          }
 
-    if (checkIsEmpty(cardList) == checkEmptyMessage) {
-      return const Text(
-        "Nenhum resultado foi encontrado para a sua busca",
-        textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 18),
-      );
-    }
+          for (EspecialistModel item in specialistList) {
+            String image = 'item.image';
+            String fullName = item.fullName;
+            String bios = item.bios;
+            String crp = item.CRP;
+            String phoneNumber = item.phoneNumber;
+            String email = item.email;
+            String id = item.id;
+            num latitude = item.latitude;
+            num longitude = item.longitude;
+            cardList.add(
+              MyCard(image: image,
+                  fullName: fullName,
+                  bios: bios,
+                  crp: crp,
+                  phoneNumber: phoneNumber,
+                  email: email,
+                  id: id,
+                  longitude: longitude,
+                  latitude: latitude,
+              ),
+            );
+          }
 
-    return Column(
-      children: cardList,
+          return Column(
+            children: cardList,
+          );
+        } else if (snapshot.hasError) {
+          return Text('Ocorreu um erro: ${snapshot.error}');
+        }
+
+        return const CircularProgressIndicator();
+      },
     );
   }
 }
+//
+// class CardListState extends State<CardList> {
+//
+//   final String checkEmptyMessage = "Nenhum resultado foi encontrado";
+//
+//   String? checkIsEmpty(List? cardList) {
+//     return (cardList == null || cardList.isEmpty) ? checkEmptyMessage : null;
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     List<EspecialistModel> cardList = [];
+//
+//     for (EspecialistModel item in widget.items) {
+//       String image = 'item.image';
+//       String fullName = item.fullName;
+//       String bios = item.bios;
+//       String CRP = item.CRP;
+//       String phoneNumber = item.phoneNumber;
+//       String email = item.email;
+//       String id = item.id;
+//       cardList.add(
+//         MyCard(image: image, fullName: fullName, bios: bios, CRP: CRP, phoneNumber: phoneNumber, email: email, id: id),
+//       );
+//     }
+//
+//     if (checkIsEmpty(cardList) == checkEmptyMessage) {
+//       return const Text(
+//         "Nenhum resultado foi encontrado para a sua busca",
+//         textAlign: TextAlign.center,
+//         style: TextStyle(fontSize: 18),
+//       );
+//     }
+//
+//     return Column(
+//       children: cardList,
+//     );
+//   }
+// }

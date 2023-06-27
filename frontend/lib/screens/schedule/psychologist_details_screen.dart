@@ -2,10 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PsyDetailsScreen extends StatefulWidget {
-  final String parametro1;
-  final int parametro2;
+  final String image;
+  final String fullName;
+  final String crp;
+  final String phoneNumber;
+  final String email;
+  final String bios;
+  final String id;
+  final num latitude;
+  final num longitude;
 
-  const PsyDetailsScreen({Key? key, required this.parametro1, required this.parametro2}) : super(key: key);
+   PsyDetailsScreen({
+    Key? key,
+    required this.image,
+    required this.fullName,
+    required this.crp,
+    required this.phoneNumber,
+    required this.email,
+    required this.bios,
+    required this.id,
+    required this.latitude,
+    required this.longitude,
+  }) : super(key: key);
 
   @override
   State<PsyDetailsScreen> createState() => PsyDetailsScreenState();
@@ -48,57 +66,44 @@ class PsyDetailsScreenState extends State<PsyDetailsScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        widget.parametro1,
+                        widget.fullName,
                         style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const Text(
-                        'CRP: XXXX-XXX',
-                        style: TextStyle(fontSize: 12, color: Colors.grey),
+                      Text(
+                        'CRP: ${widget.crp}',
+                        style: const TextStyle(fontSize: 12, color: Colors.grey),
                       ),
                     ],
                   ),
                 ],
               ),
               const SizedBox(height: 24),
-              const Text(
-                'Olá! Prazer, meu nome é Kenma! Formado pela PUCCAMP em 2002, sou psicólogo na área esportiva a mais de 20 anos e tenho maior afinidade com teoria comportamental. Espero poder ajudar e fico a disposição!',
-                style: TextStyle(fontSize: 16),
+              Text(
+                widget.bios,
+                style: const TextStyle(fontSize: 16),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'Telefone: ${widget.phoneNumber}',
+                style: const TextStyle(fontSize: 16),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'Email: ${widget.email}',
+                style: const TextStyle(fontSize: 16),
               ),
               const SizedBox(height: 12),
               const Text(
-                'Atende virtualmente? SIM',
+                'Especialização: Psicologia Clínica',
                 style: TextStyle(fontSize: 16),
-              ),
-              const SizedBox(height: 12),
-              const Text(
-                'Endereço do consultório: Av. Albert Einstein, 1251 - Cidade Universitária, Campinas - SP, 13083-852.',
-                style: TextStyle(fontSize: 16),
-              ),
-              const SizedBox(height: 12),
-              const Text(
-                'Especializações:',
-                style: TextStyle(fontSize: 16),
-              ),
-              Flexible(
-                child: SizedBox(
-                  height: 100,
-                  child: ListView.builder(
-                    itemCount: 5,
-                    itemBuilder: (context, index) {
-                      return Text(
-                        'Item $index',
-                      );
-                    },
-                  ),
-                ),
               ),
               const SizedBox(height: 24),
               Center(
                 child: ElevatedButton(
                   onPressed: () {
-                    _launchWhatsApp('5511970342568');
+                    _launchWhatsApp('55${widget.phoneNumber}');
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
