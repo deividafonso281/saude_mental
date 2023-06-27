@@ -5,10 +5,12 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:frontend/screens/auth/common.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:search_cep/search_cep.dart';
 
 import '../../../models/auth_model.dart';
 import '../../../models/user_model.dart';
 import '../../../providers/auth/auth_provider.dart';
+import '../../../providers/geo_services/coordinates_service.dart';
 import '../../../utils/router.dart';
 
 class EditScreenUsuario extends StatefulWidget {
@@ -29,8 +31,57 @@ class EditScreenUsuarioState extends State<EditScreenUsuario> {
   final TextEditingController _emailTextController = TextEditingController();
   final TextEditingController _passwordTextContoller = TextEditingController();
   final TextEditingController _telefoneTextController = TextEditingController();
+  final TextEditingController _cepTextController = TextEditingController();
   final TextEditingController _birthDateTextController =
       TextEditingController();
+
+  PostmonCepInfo? _postmonCepInfo;
+  SearchCepError? _searchCepError;
+  String? selectedState;
+  String? selectedCity;
+  bool _searchingCep = false;
+
+  String _getPostmonCepInfoString() {
+    return "${_postmonCepInfo!.logradouro}, ${_postmonCepInfo!.cidade} - ${_postmonCepInfo!.estado}, ${_postmonCepInfo!.cep}";
+  }
+
+  void _changeCepInfo() async {
+    var cep = _cepTextController.text;
+
+    if (_cepTextController.text.isEmpty) {
+      setState(() {
+        _searchCepError = null;
+        _postmonCepInfo = null;
+      });
+
+      return;
+    }
+
+    var postmonSearchCep = PostmonSearchCep();
+
+    setState(() {
+      _searchingCep = true;
+    });
+
+    var postmonCepInfo = (await postmonSearchCep.searchInfoByCep(cep: cep));
+
+    postmonCepInfo.fold((l) {
+      setState(() {
+        _searchCepError = l;
+        _postmonCepInfo = null;
+      });
+    }, (r) {
+      setState(() {
+        _postmonCepInfo = r;
+        _searchCepError = null;
+      });
+    });
+
+    setState(() {
+      _searchingCep = false;
+    });
+  }
+
   
   var maskFormatter = MaskTextInputFormatter(
     mask: '(##) #####-####', 
@@ -216,6 +267,56 @@ class EditScreenUsuarioState extends State<EditScreenUsuario> {
                           },
                           obscureText: true,
                         ),
+                        TextFormField(
+                        controller: _cepTextController,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                          labelText: 'CEP',
+                        ),
+                        onChanged: (String e) => _changeCepInfo(),
+                        validator: (campo) {
+                          if (_searchCepError != null) {
+                            String out = _searchCepError!.errorMessage;
+                            return null;
+                          }
+                          String? out = checkIsEmpty(campo);
+                          if (out != null) {
+                            return out;
+                          }
+                          return null;
+                        },
+                      ),
+                      _searchCepError != null || _postmonCepInfo != null
+                          ? Column(
+                              children: [
+                                const SizedBox(
+                                  height: 6,
+                                ),
+                                !_searchingCep
+                                    ? Container(
+                                        width: double.infinity,
+                                        padding: EdgeInsets.all(10.0),
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context).hintColor,
+                                          borderRadius:
+                                              BorderRadius.circular(5.0),
+                                        ),
+                                        child: Text(
+                                          _searchCepError != null
+                                              ? _searchCepError!.errorMessage
+                                              : _getPostmonCepInfoString(),
+                                          style: const TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors
+                                                .white, // Apply validation error color
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      )
+                                    : const CircularProgressIndicator(),
+                              ],
+                            )
+                          : const SizedBox(),
                         
                         ElevatedButton(
                                 onPressed: () async {
@@ -228,6 +329,16 @@ class EditScreenUsuarioState extends State<EditScreenUsuario> {
 
                                     final firestoreDao = FirestoreDao<UserModel>();
 
+                                     Map<String, double> coordinates =
+                                      await CoordinatesService
+                                              .fetchCoordinatesByAddrees(
+                                                  _postmonCepInfo!.logradouro ??
+                                                      "",
+                                                  _postmonCepInfo!.cidade ?? "",
+                                                  _postmonCepInfo!.estado ?? "",
+                                                  _postmonCepInfo!.cep ?? "") ??
+                                          {};
+
                                     await firestoreDao.setData(
                                         UserModel(
                                           id: authModel.uid,
@@ -236,6 +347,9 @@ class EditScreenUsuarioState extends State<EditScreenUsuario> {
                                           gender: stringToGender(_selectedGender!),
                                           phoneNumber: _telefoneTextController.text,
                                           imageUrl: imageUrl,
+                                          latitude: coordinates["latitude"] ?? 0,
+                                          longitude: coordinates["longitude"] ?? 0,
+                                          address: _getPostmonCepInfoString(),
                                         ),
                                       );
                                       Navigator.of(context).restorablePushNamed(
