@@ -40,9 +40,9 @@ dependencies:
   cloud_firestore: ^4.8.1
   firebase_helpers: ^0.6.1
   dependencies:
-  brasil_fields: ^1.12.0
   search_cep: ^4.0.1
 
+  url_launcher: ^6.0.0
 
 dev_dependencies:
   flutter_test:
