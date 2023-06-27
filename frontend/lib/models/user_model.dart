@@ -15,6 +15,7 @@ class UserModelConverter implements MapConverter<UserModel> {
       latitude: json["latitude"],
       longitude: json["longitude"],
       address: json["address"],
+      imageUrl: json["imageUrl"]
     );
   }
 
@@ -29,6 +30,7 @@ class UserModelConverter implements MapConverter<UserModel> {
       "latitude": model.latitude,
       "longitude": model.longitude,
       "address": model.address,
+      "imageUrl": model.imageUrl
     };
   }
 }
@@ -42,6 +44,7 @@ class UserModel extends BaseModel {
   double latitude;
   double longitude;
   String address;
+  String imageUrl;
 
   UserModel({
     required this.id,
@@ -52,6 +55,7 @@ class UserModel extends BaseModel {
     required this.latitude,
     required this.longitude,
     required this.address,
+    required this.imageUrl
   }) : super(id: id);
 }
 
@@ -78,6 +82,19 @@ extension ParseToString on Gender {
 
 List<String> genderToStringList() {
   return Gender.values.map((esp) => esp.toShortString()).toList();
+}
+
+String genderToString(Gender gender) {
+  switch (gender) {
+    case Gender.Male:
+      return "Masculino";
+    case Gender.Female:
+      return "Feminino";
+    case Gender.NonBinary:
+      return "Não Binario";
+    default:
+      return "Não Binario";
+  }
 }
 
 Gender stringToGender(String gender) {

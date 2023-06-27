@@ -16,6 +16,7 @@ class EspecialistModelConverter implements MapConverter<EspecialistModel> {
       latitude: json["latitude"],
       longitude: json["longitude"],
       address: json["address"],
+      imageUrl: json["ImageUrl"]
     );
   }
 
@@ -54,6 +55,7 @@ class EspecialistModel extends UserModel {
     required super.latitude,
     required super.longitude,
     required super.address,
+    required super.imageUrl,
   });
 }
 
