@@ -39,6 +39,10 @@ dependencies:
   provider: ^6.0.5
   cloud_firestore: ^4.8.1
   firebase_helpers: ^0.6.1
+  dependencies:
+  brasil_fields: ^1.12.0
+  search_cep: ^4.0.1
+
 
 dev_dependencies:
   flutter_test:
