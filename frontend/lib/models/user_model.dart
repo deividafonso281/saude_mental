@@ -13,9 +13,10 @@ class UserModelConverter implements MapConverter<UserModel> {
       fullName: json["fullName"],
       gender: stringToGender(json["gender"]),
       phoneNumber: json["phoneNumber"],
-      latitude: json["latitude"],
-      longitude: json["longitude"],
-      address: json["address"],
+      latitude: json["latitude"] ?? 0,
+      longitude: json["longitude"] ?? 0,
+      address: json["address"] ?? "",
+      imageUrl: json["imageUrl"],
       agenda: json["agenda"],
     );
   }
