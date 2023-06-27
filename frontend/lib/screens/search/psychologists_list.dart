@@ -19,17 +19,13 @@ class CardList extends StatefulWidget {
 class CardListState extends State<CardList> {
   final String checkEmptyMessage = "Nenhum resultado foi encontrado";
 
-  String? checkIsEmpty(List? cardList) {
-    return (cardList == null || cardList.isEmpty) ? checkEmptyMessage : null;
-  }
-
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<EspecialistModel>>(
       stream: widget.items,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          List<EspecialistModel>? specialistList = snapshot.data;
+          List<EspecialistModel> specialistList = snapshot.hasData ? snapshot.data! : [];
           List<Widget> cardList = [];
 
           if (specialistList == null || specialistList.isEmpty) {
