@@ -9,6 +9,7 @@ import 'package:frontend/screens/auth/common.dart';
 import 'package:search_cep/search_cep.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 import '../../../models/auth_model.dart';
 import '../../../models/user_model.dart';
@@ -41,6 +42,18 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
   String? _especialization;
   final TextEditingController _biosTextController = TextEditingController();
   final TextEditingController _crptTextController = TextEditingController();
+
+  var maskFormatter = MaskTextInputFormatter(
+    mask: '(##) #####-####', 
+    filter: { "#": RegExp(r'[0-9]') },
+    type: MaskAutoCompletionType.lazy
+  );
+
+  var dataFormatter = MaskTextInputFormatter(
+    mask: '##/##/####', 
+    filter: { "#": RegExp(r'[0-9]') },
+    type: MaskAutoCompletionType.lazy
+  );
 
 Future<void> _uploadImageToFirebase() async {
   if (_image == null) return;
@@ -206,6 +219,7 @@ Future<void> _uploadImageToFirebase() async {
                         validator: (campo) {
                           return checkIsEmpty(campo);
                         },
+                        inputFormatters: [dataFormatter],
                       ),
                       DropdownButtonFormField(
                         value: _selectedGender,
@@ -235,7 +249,8 @@ Future<void> _uploadImageToFirebase() async {
                           keyboardType: TextInputType.phone,
                           validator: (campo) {
                             return checkIsEmpty(campo);
-                          }),
+                          },
+                           inputFormatters: [maskFormatter],),
                       TextFormField(
                         controller: _emailTextController,
                         decoration: const InputDecoration(

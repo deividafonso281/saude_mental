@@ -4,6 +4,7 @@ import 'package:frontend/providers/database/firebase/firestore_general%20_dao.da
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:frontend/screens/auth/common.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 import '../../../models/auth_model.dart';
 import '../../../models/user_model.dart';
@@ -30,6 +31,18 @@ class EditScreenUsuarioState extends State<EditScreenUsuario> {
   final TextEditingController _telefoneTextController = TextEditingController();
   final TextEditingController _birthDateTextController =
       TextEditingController();
+  
+  var maskFormatter = MaskTextInputFormatter(
+    mask: '(##) #####-####', 
+    filter: { "#": RegExp(r'[0-9]') },
+    type: MaskAutoCompletionType.lazy
+  );
+
+  var dataFormatter = MaskTextInputFormatter(
+    mask: '##/##/####', 
+    filter: { "#": RegExp(r'[0-9]') },
+    type: MaskAutoCompletionType.lazy
+  );
 
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await ImagePicker().pickImage(source: source);
@@ -116,6 +129,7 @@ class EditScreenUsuarioState extends State<EditScreenUsuario> {
                             return checkIsEmpty(campo);
                           },
                           keyboardType: TextInputType.text,
+                          initialValue: data.fullName,
                         ),
                         TextFormField(
                           controller: _birthDateTextController,
@@ -127,6 +141,7 @@ class EditScreenUsuarioState extends State<EditScreenUsuario> {
                             return checkIsEmpty
                             (campo);
                           },
+                          inputFormatters: [dataFormatter],
                         ),
                         DropdownButtonFormField(
                           value: _selectedGender,
@@ -157,6 +172,7 @@ class EditScreenUsuarioState extends State<EditScreenUsuario> {
                           validator: (campo) {
                             return checkIsEmpty(campo);
                           },
+                          inputFormatters: [maskFormatter],
                         ),
                         TextFormField(
                           controller: _emailTextController,
