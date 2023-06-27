@@ -1,18 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/screens/search/reservation_arguments.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:frontend/utils/reservation_parameters.dart';
 
 class ReservationScreen extends StatefulWidget {
   const ReservationScreen({super.key});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
 
   @override
   State<ReservationScreen> createState() => ReservationScreenState();
@@ -92,7 +84,11 @@ class ReservationScreenState extends State<ReservationScreen> {
   @override
   Widget build(BuildContext context) {
 
+<<<<<<< HEAD
     final args = ModalRoute.of(context)!.settings.arguments as ReservationArguments;
+=======
+    final args = ModalRoute.of(context)!.settings.arguments as ReservationParameters;
+>>>>>>> 838e2d5 (Added navigation and parameter passing to Reservation screen.)
 
     return Scaffold(
       appBar: AppBar(
@@ -104,7 +100,11 @@ class ReservationScreenState extends State<ReservationScreen> {
       SingleChildScrollView(
         child: Column(
           children: <Widget>[
+<<<<<<< HEAD
             ListTile(title: Text("Reserva de horário com profissional ${args.fullName}"),),
+=======
+            ListTile(title: Text('Agendamento com profissional ${args.name}'),),
+>>>>>>> 838e2d5 (Added navigation and parameter passing to Reservation screen.)
             TableCalendar(
               focusedDay: _focusedDay!,
               firstDay: DateTime.now(),
