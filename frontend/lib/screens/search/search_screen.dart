@@ -4,9 +4,6 @@ import 'package:provider/provider.dart';
 import '../../../providers/auth/auth_provider.dart';
 import 'package:frontend/screens/search/psychologists_list.dart';
 
-import '../../models/auth_model.dart';
-import '../../utils/router.dart';
-
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
 
@@ -38,8 +35,6 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
-    final authModel = Provider.of<AuthModel>(context);
-    final userType = authModel.userType;
 
     return Scaffold(
       body: Center(
@@ -47,51 +42,11 @@ class _SearchScreenState extends State<SearchScreen> {
           child: Form(
             key: _formKey,
             child: Padding(
-              //padding: const EdgeInsets.only(bottom: 24),
               padding: const EdgeInsets.all(24.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: 60,
-                        height: 60,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(
-                            color: Colors.black,
-                            width: 1.0,
-                          ),
-                          borderRadius: BorderRadius.circular(55),
-                        ),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if (userType == UserType.Especialist) {
-                              Navigator.of(context).restorablePushNamed(
-                              Routes.edit_screen_psicologo,
-                            );
-                            } else {
-                              Navigator.of(context).restorablePushNamed(
-                              Routes.edit_screen_usuario,
-                            );
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            shape: CircleBorder(),
-                            padding: EdgeInsets.zero,
-                          ),
-                          child: CircleAvatar(
-                            radius: 30,
-                            backgroundImage: NetworkImage('https://picsum.photos/200/300'),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
                   TextFormField(
                     controller: _nomePsicoloco,
                     decoration: const InputDecoration(
