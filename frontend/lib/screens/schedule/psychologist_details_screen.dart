@@ -112,7 +112,6 @@ class PsyDetailsScreenState extends State<PsyDetailsScreen> {
                   ElevatedButton(
                   onPressed: () {
                     Navigator.pushNamed(
-<<<<<<< HEAD
                       context,
                       Routes.reservation_screen,
                       arguments: ReservationArguments(
@@ -120,11 +119,6 @@ class PsyDetailsScreenState extends State<PsyDetailsScreen> {
                         widget.id,
                           widget.agenda,
                       ),
-=======
-                        context,
-                        Routes.reservation_screen,
-                        arguments: ReservationParameters(name: widget.parametro1, parametro2: widget.parametro2),
->>>>>>> 838e2d5 (Added navigation and parameter passing to Reservation screen.)
                     );
                   },
                   style: ElevatedButton.styleFrom(
@@ -139,11 +133,7 @@ class PsyDetailsScreenState extends State<PsyDetailsScreen> {
                 ),
                   ElevatedButton(
                     onPressed: () {
-<<<<<<< HEAD
                       _launchWhatsApp('55${widget.phoneNumber}');
-=======
-                      _launchWhatsApp('5511970342568');
->>>>>>> 838e2d5 (Added navigation and parameter passing to Reservation screen.)
                     },
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(

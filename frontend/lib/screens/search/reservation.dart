@@ -84,11 +84,7 @@ class ReservationScreenState extends State<ReservationScreen> {
   @override
   Widget build(BuildContext context) {
 
-<<<<<<< HEAD
     final args = ModalRoute.of(context)!.settings.arguments as ReservationArguments;
-=======
-    final args = ModalRoute.of(context)!.settings.arguments as ReservationParameters;
->>>>>>> 838e2d5 (Added navigation and parameter passing to Reservation screen.)
 
     return Scaffold(
       appBar: AppBar(
@@ -100,11 +96,7 @@ class ReservationScreenState extends State<ReservationScreen> {
       SingleChildScrollView(
         child: Column(
           children: <Widget>[
-<<<<<<< HEAD
             ListTile(title: Text("Reserva de horário com profissional ${args.fullName}"),),
-=======
-            ListTile(title: Text('Agendamento com profissional ${args.name}'),),
->>>>>>> 838e2d5 (Added navigation and parameter passing to Reservation screen.)
             TableCalendar(
               focusedDay: _focusedDay!,
               firstDay: DateTime.now(),
