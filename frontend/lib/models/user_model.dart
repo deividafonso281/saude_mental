@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:frontend/models/base_model.dart';
 import 'package:frontend/models/convertos/map_converter_interface.dart';
 
@@ -8,8 +10,11 @@ class UserModelConverter implements MapConverter<UserModel> {
       id: id,
       email: json["email"],
       fullName: json["fullName"],
-      gender: json["gender"],
+      gender: stringToGender(json["gender"]),
       phoneNumber: json["phoneNumber"],
+      latitude: json["latitude"],
+      longitude: json["longitude"],
+      address: json["address"],
     );
   }
 
@@ -19,8 +24,11 @@ class UserModelConverter implements MapConverter<UserModel> {
       "id": model.id,
       "email": model.email,
       "fullName": model.fullName,
-      "gender": model.gender,
+      "gender": model.gender.toShortString(),
       "phoneNumber": model.phoneNumber,
+      "latitude": model.latitude,
+      "longitude": model.longitude,
+      "address": model.address,
     };
   }
 }
@@ -31,14 +39,20 @@ class UserModel extends BaseModel {
   String fullName;
   Gender gender;
   String phoneNumber;
+  double latitude;
+  double longitude;
+  String address;
 
-  UserModel(
-      {required this.id,
-      required this.email,
-      required this.fullName,
-      required this.gender,
-      required this.phoneNumber})
-      : super(id: id);
+  UserModel({
+    required this.id,
+    required this.email,
+    required this.fullName,
+    required this.gender,
+    required this.phoneNumber,
+    required this.latitude,
+    required this.longitude,
+    required this.address,
+  }) : super(id: id);
 }
 
 enum Gender {

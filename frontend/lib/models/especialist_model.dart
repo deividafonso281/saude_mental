@@ -8,11 +8,14 @@ class EspecialistModelConverter implements MapConverter<EspecialistModel> {
       id: id,
       email: json["email"],
       fullName: json["fullName"],
-      gender: json["gender"],
+      gender: stringToGender(json["gender"]),
       phoneNumber: json["phoneNumber"],
       CRP: json["CRP"],
-      especialization: json["Especialization"],
+      especialization: stringToEspscialization(json["Especialization"]),
       bios: json["bios"],
+      latitude: json["latitude"],
+      longitude: json["longitude"],
+      address: json["address"],
     );
   }
 
@@ -22,10 +25,14 @@ class EspecialistModelConverter implements MapConverter<EspecialistModel> {
       "id": model.id,
       "email": model.email,
       "fullName": model.fullName,
-      "gender": model.gender,
+      "gender": model.gender.toShortString(),
       "phoneNumber": model.phoneNumber,
       "CRP": model.CRP,
       "bios": model.bios,
+      "latitude": model.latitude,
+      "longitude": model.longitude,
+      "especialization": model.especialization.toShortString(),
+      "address": model.address,
     };
   }
 }
@@ -44,6 +51,9 @@ class EspecialistModel extends UserModel {
     required super.fullName,
     required super.gender,
     required super.phoneNumber,
+    required super.latitude,
+    required super.longitude,
+    required super.address,
   });
 }
 
