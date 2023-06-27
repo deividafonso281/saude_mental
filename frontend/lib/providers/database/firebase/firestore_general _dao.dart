@@ -19,7 +19,6 @@ changed to true.
  */
 
 class FirestoreDao<ModelT extends BaseModel> implements DataBase<ModelT> {
-
   final _firestoreService = FirestoreService.instance;
   final _modelConverter = MapConverters.mapConverter<ModelT>();
   final _paths = PathsFactory.mapPaths<ModelT>();
@@ -81,10 +80,5 @@ class FirestoreDao<ModelT extends BaseModel> implements DataBase<ModelT> {
       batchDelete.delete(ds.reference);
     }
     await batchDelete.commit();
-  }
-  
-  @override
-  Future<ModelT> getById({required String modelId}) async {
-    return await _firestoreService.getById(path: _paths.entity(modelId), builder: (data, id) => _modelConverter.fromMap(data, id));
   }
 }
