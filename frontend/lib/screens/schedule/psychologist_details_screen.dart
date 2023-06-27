@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/screens/search/reservation_arguments.dart';
+import 'package:frontend/utils/router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PsyDetailsScreen extends StatefulWidget {
@@ -11,6 +13,7 @@ class PsyDetailsScreen extends StatefulWidget {
   final String id;
   final num latitude;
   final num longitude;
+  final String agenda;
 
    PsyDetailsScreen({
     Key? key,
@@ -23,6 +26,7 @@ class PsyDetailsScreen extends StatefulWidget {
     required this.id,
     required this.latitude,
     required this.longitude,
+     required this.agenda,
   }) : super(key: key);
 
   @override
@@ -100,10 +104,20 @@ class PsyDetailsScreenState extends State<PsyDetailsScreen> {
                 style: TextStyle(fontSize: 16),
               ),
               const SizedBox(height: 24),
-              Center(
-                child: ElevatedButton(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  ElevatedButton(
                   onPressed: () {
-                    _launchWhatsApp('55${widget.phoneNumber}');
+                    Navigator.pushNamed(
+                      context,
+                      Routes.reservation_screen,
+                      arguments: ReservationArguments(
+                        widget.fullName,
+                        widget.id,
+                          widget.agenda,
+                      ),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -115,6 +129,21 @@ class PsyDetailsScreenState extends State<PsyDetailsScreen> {
                     style: TextStyle(fontSize: 16),
                   ),
                 ),
+                  ElevatedButton(
+                    onPressed: () {
+                      _launchWhatsApp('55${widget.phoneNumber}');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text(
+                      'Entrar em contato pelo WhatsApp',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                ]
               ),
             ],
           ),

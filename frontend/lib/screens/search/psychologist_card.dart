@@ -11,6 +11,7 @@ class MyCard extends StatelessWidget {
   final String id;
   final num latitude;
   final num longitude;
+  final String agenda;
 
   const MyCard({
     Key? key,
@@ -23,6 +24,7 @@ class MyCard extends StatelessWidget {
     required this.id,
     required this.latitude,
     required this.longitude,
+    required this.agenda,
   }) : super(key: key);
 
   @override
@@ -42,6 +44,7 @@ class MyCard extends StatelessWidget {
               id: id,
               longitude: longitude,
               latitude: latitude,
+              agenda: agenda,
             ),
           ),
         );

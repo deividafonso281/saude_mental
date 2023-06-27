@@ -50,6 +50,7 @@ class CardListState extends State<CardList> {
             String id = item.id;
             num latitude = item.latitude;
             num longitude = item.longitude;
+            String agenda = item.agenda;
             cardList.add(
               MyCard(image: image,
                   fullName: fullName,
@@ -60,6 +61,7 @@ class CardListState extends State<CardList> {
                   id: id,
                   longitude: longitude,
                   latitude: latitude,
+                agenda: agenda,
               ),
             );
           }

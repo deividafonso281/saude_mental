@@ -1,7 +1,8 @@
-import 'dart:ffi';
+//import 'dart:ffi';
 
 import 'package:frontend/models/base_model.dart';
 import 'package:frontend/models/convertos/map_converter_interface.dart';
+import 'dart:convert';
 
 class UserModelConverter implements MapConverter<UserModel> {
   @override
@@ -15,6 +16,7 @@ class UserModelConverter implements MapConverter<UserModel> {
       latitude: json["latitude"],
       longitude: json["longitude"],
       address: json["address"],
+      agenda: json["agenda"],
     );
   }
 
@@ -29,6 +31,7 @@ class UserModelConverter implements MapConverter<UserModel> {
       "latitude": model.latitude,
       "longitude": model.longitude,
       "address": model.address,
+      "agenda": model.agenda,
     };
   }
 }
@@ -42,6 +45,7 @@ class UserModel extends BaseModel {
   double latitude;
   double longitude;
   String address;
+  String agenda;
 
   UserModel({
     required this.id,
@@ -52,6 +56,7 @@ class UserModel extends BaseModel {
     required this.latitude,
     required this.longitude,
     required this.address,
+    required this.agenda,
   }) : super(id: id);
 }
 
@@ -91,4 +96,8 @@ Gender stringToGender(String gender) {
     default:
       return Gender.NonBinary;
   }
+}
+
+List<List<String>> stringToAgenda(String ag) {
+  return json.decode(ag).cast<String>().toList();
 }

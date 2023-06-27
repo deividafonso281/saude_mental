@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/screens/search/reservation_arguments.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-class Agendamento extends StatefulWidget {
-  const Agendamento({super.key});
+class ReservationScreen extends StatefulWidget {
+  const ReservationScreen({super.key});
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -14,10 +15,10 @@ class Agendamento extends StatefulWidget {
   // always marked "final".
 
   @override
-  State<Agendamento> createState() => AgendamentoState();
+  State<ReservationScreen> createState() => ReservationScreenState();
 }
 
-class AgendamentoState extends State<Agendamento> {
+class ReservationScreenState extends State<ReservationScreen> {
   DateTime? _selectedDay = DateTime.now();
   DateTime? _focusedDay = DateTime.now();
   List<String> _possiblyChosen= [];
@@ -91,6 +92,8 @@ class AgendamentoState extends State<Agendamento> {
   @override
   Widget build(BuildContext context) {
 
+    final args = ModalRoute.of(context)!.settings.arguments as ReservationArguments;
+
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
@@ -101,6 +104,7 @@ class AgendamentoState extends State<Agendamento> {
       SingleChildScrollView(
         child: Column(
           children: <Widget>[
+            ListTile(title: Text("Reserva de horário com profissional ${args.fullName}"),),
             TableCalendar(
               focusedDay: _focusedDay!,
               firstDay: DateTime.now(),
