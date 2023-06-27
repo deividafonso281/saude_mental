@@ -11,7 +11,7 @@ class EspecialistModelConverter implements MapConverter<EspecialistModel> {
       gender: stringToGender(json["gender"]),
       phoneNumber: json["phoneNumber"],
       CRP: json["CRP"],
-      especialization: stringToEspscialization(json["Especialization"]),
+      especialization: stringToEspscialization(json["especialization"]),
       bios: json["bios"],
       latitude: json["latitude"],
       longitude: json["longitude"],
