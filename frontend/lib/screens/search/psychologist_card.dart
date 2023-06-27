@@ -3,16 +3,26 @@ import '../schedule/psychologist_details_screen.dart';
 
 class MyCard extends StatelessWidget {
   final String image;
-  final String text1;
-  final String text2;
-  final String text3;
+  final String fullName;
+  final String crp;
+  final String phoneNumber;
+  final String email;
+  final String bios;
+  final String id;
+  final num latitude;
+  final num longitude;
 
   const MyCard({
     Key? key,
     required this.image,
-    required this.text1,
-    required this.text2,
-    required this.text3,
+    required this.fullName,
+    required this.crp,
+    required this.phoneNumber,
+    required this.email,
+    required this.bios,
+    required this.id,
+    required this.latitude,
+    required this.longitude,
   }) : super(key: key);
 
   @override
@@ -22,9 +32,16 @@ class MyCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const PsyDetailsScreen(
-              parametro1: "KENMA KENMA KENMA",
-              parametro2: 123,
+            builder: (context) => PsyDetailsScreen(
+              image: '',
+              fullName: fullName,
+              bios: bios,
+              crp: crp,
+              phoneNumber: phoneNumber,
+              email: email,
+              id: id,
+              longitude: longitude,
+              latitude: latitude,
             ),
           ),
         );
@@ -54,21 +71,28 @@ class MyCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 10),
-                  const Text(
-                    'Nome do piscólogo',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
+                  SizedBox(
+                      width: 200,
+                      child:
+                        Text(
+                        fullName,
+                        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 3,
+                        ),
+                  )
+
                 ],
               ),
               const SizedBox(height: 10),
-              const Text(
-                '+55 (19) 91234-5678 \n Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto ',
+              Text(
+                'CRP: $crp\n$email\n$phoneNumber',
                 textAlign: TextAlign.left,
-                style: TextStyle(fontSize: 18),
+                style: const TextStyle(fontSize: 18),
               ),
               const SizedBox(height: 10),
               const Text(
-                'A 14km de você',
+                'A X Km de você',
                 style: TextStyle(fontSize: 12),
               ),
             ],

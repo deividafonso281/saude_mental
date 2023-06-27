@@ -24,6 +24,14 @@ class Routes {
     intermediete_register_screen: (BuildContext context) =>
         const IntermedieteRegisterScreen(),
     search_screen: (BuildContext context) => const SearchScreen(),
-    psychologist_details_screen: (BuildContext context) => const PsyDetailsScreen(parametro1: '', parametro2: 0,),
+    psychologist_details_screen: (BuildContext context) => PsyDetailsScreen(image: '',
+        fullName: '',
+        bios: '',
+        crp: '',
+        phoneNumber: '',
+        email: '',
+        id: '',
+        longitude: 0,
+        latitude: 0,),
   };
 }

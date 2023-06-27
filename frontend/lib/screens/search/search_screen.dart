@@ -3,6 +3,10 @@ import 'package:provider/provider.dart';
 
 import '../../../providers/auth/auth_provider.dart';
 import 'package:frontend/screens/search/psychologists_list.dart';
+import 'package:frontend/providers/database/firebase/firestore_general%20_dao.dart';
+
+import '../../models/especialist_model.dart';
+
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -16,21 +20,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   final TextEditingController _nomePsicoloco = TextEditingController();
   String _selectedSpecialization = 'Especialização';
-  final List<List<String>> items = [
-    [
-      'https://example.com/image1.jpg',
-      'Texto 1',
-      'Texto 2',
-      'Texto 3',
-    ],
-    [
-      'https://example.com/image2.jpg',
-      'text1',
-      'text2',
-      'text3',
-    ],
-    // Adicione mais itens conforme necessário
-  ];
+  var database = FirestoreDao<EspecialistModel>();
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +98,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             // }
                           }),
                   const SizedBox(height: 18),
-                  CardList(items: items),
+                  CardList(items: database.dataListStream()),
                   ElevatedButton(
                     onPressed: () {
                       authProvider.signOut();
