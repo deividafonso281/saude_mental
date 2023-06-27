@@ -202,7 +202,7 @@ packages:
     source: hosted
     version: "5.5.3"
   firebase_core:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: firebase_core
       sha256: a4a99204da264a0aa9d54a332ea0315ce7b0768075139c77abefe98093dd98be
@@ -399,7 +399,15 @@ packages:
       sha256: "623a88c9594aa774443aa3eb2d41807a48486b5613e67599fb4c41c0ad47c340"
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.0"
+    version: "1.1.1"
+  mask_text_input_formatter:
+    dependency: "direct main"
+    description:
+      name: mask_text_input_formatter
+      sha256: "19bb7809c3c2559277e95521b3ee421e1409eb2cc85efd2feb191696c92490f4"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.0"
   matcher:
     dependency: transitive
     description:
@@ -464,14 +472,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.8.2"
-  petitparser:
-    dependency: transitive
-    description:
-      name: petitparser
-      sha256: "49392a45ced973e8d94a85fdb21293fbb40ba805fc49f2965101ae748a3683b4"
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.1.0"
   plugin_platform_interface:
     dependency: transitive
     description:

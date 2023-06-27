@@ -7,6 +7,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:frontend/screens/auth/common.dart';
 import 'package:search_cep/search_cep.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 import '../../../models/auth_model.dart';
 import '../../../models/user_model.dart';
@@ -25,6 +28,7 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
   final _formKey = GlobalKey<FormState>();
 
   File? _image;
+  String imageUrl = "";
   String? _selectedGender;
   final TextEditingController _nameTextContoller = TextEditingController();
   final TextEditingController _emailTextController = TextEditingController();
@@ -39,12 +43,57 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
   final TextEditingController _biosTextController = TextEditingController();
   final TextEditingController _crptTextController = TextEditingController();
 
-  Future<void> _pickImage(ImageSource source) async {
-    final pickedFile = await ImagePicker().pickImage(source: source);
-    setState(() {
-      _image = File(pickedFile!.path);
-    });
+  var maskFormatter = MaskTextInputFormatter(
+    mask: '(##) #####-####', 
+    filter: { "#": RegExp(r'[0-9]') },
+    type: MaskAutoCompletionType.lazy
+  );
+
+  var dataFormatter = MaskTextInputFormatter(
+    mask: '##/##/####', 
+    filter: { "#": RegExp(r'[0-9]') },
+    type: MaskAutoCompletionType.lazy
+  );
+
+Future<void> _uploadImageToFirebase() async {
+  if (_image == null) return;
+
+  try {
+    // Create a reference to the Firebase Storage bucket
+    final storage = FirebaseStorage.instance;
+    final storageRef = storage.ref();
+
+    // Generate a unique filename for the image
+    final timestamp = DateTime.now().millisecondsSinceEpoch.toString();
+    final filename = 'profile_$timestamp.jpg';
+
+    // Upload the file to the storage bucket
+    final uploadTask = storageRef.child(filename).putFile(_image!);
+    
+    // Wait for the upload to complete
+    final snapshot = await uploadTask.whenComplete(() {});
+
+    // Get the public download URL for the uploaded image
+    imageUrl = await snapshot.ref.getDownloadURL();
+
+    // Do something with the imageUrl (save it to Firebase Firestore, display it in your app, etc.)
+    print('Image uploaded successfully. Download URL: $imageUrl');
+  } catch (error) {
+    print('Error uploading image: $error');
   }
+}
+
+
+  Future<void> _pickImage(ImageSource source) async {
+  final pickedFile = await ImagePicker().pickImage(source: source);
+  if (pickedFile != null) {
+    setState(() {
+      _image = File(pickedFile.path);
+    });
+    // Upload the image to Firebase Storage
+    await _uploadImageToFirebase();
+  }
+}
 
   PostmonCepInfo? _postmonCepInfo;
   SearchCepError? _searchCepError;
@@ -170,6 +219,7 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
                         validator: (campo) {
                           return checkIsEmpty(campo);
                         },
+                        inputFormatters: [dataFormatter],
                       ),
                       DropdownButtonFormField(
                         value: _selectedGender,
@@ -199,7 +249,8 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
                           keyboardType: TextInputType.phone,
                           validator: (campo) {
                             return checkIsEmpty(campo);
-                          }),
+                          },
+                           inputFormatters: [maskFormatter],),
                       TextFormField(
                         controller: _emailTextController,
                         decoration: const InputDecoration(
@@ -377,6 +428,7 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
                                       latitude: coordinates["latitude"] ?? 0,
                                       longitude: coordinates["longitude"] ?? 0,
                                       address: _getPostmonCepInfoString(),
+                                      imageUrl: imageUrl,
                                     ));
                                   } else {
                                     final firestoreDao =
@@ -389,6 +441,7 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
                                       gender: stringToGender(_selectedGender!),
                                       phoneNumber: _telefoneTextController.text,
                                       CRP: _crptTextController.text,
+                                      imageUrl: imageUrl,
                                       especialization: stringToEspscialization(
                                           _especialization!),
                                       bios: _biosTextController.text,
