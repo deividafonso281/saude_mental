@@ -3,6 +3,7 @@ import 'package:frontend/screens/auth/register/intermediete_register_screen.dart
 import 'package:frontend/screens/auth/login_screen.dart';
 import 'package:frontend/screens/search/search_screen.dart';
 import 'package:frontend/screens/schedule/psychologist_details_screen.dart';
+import 'package:frontend/screens/search/reservation.dart';
 
 import '../screens/auth/register/register_screen.dart';
 
@@ -16,6 +17,7 @@ class Routes {
       "intermediete_register_screen";
   static const String search_screen = "search_screen";
   static const String psychologist_details_screen = "psychologist_details_screen";
+  static const String reservation_screen = "reservation_screen";
 
   static final routes = <String, WidgetBuilder>{
     login_screen: (BuildContext context) => const LoginScreen(),
@@ -32,6 +34,8 @@ class Routes {
         email: '',
         id: '',
         longitude: 0,
-        latitude: 0,),
+        latitude: 0,
+        agenda: '',),
+    reservation_screen: (BuildContext context) => const ReservationScreen(),
   };
 }

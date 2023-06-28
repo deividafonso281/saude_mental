@@ -46,6 +46,7 @@ class CardListState extends State<CardList> {
             String id = item.id;
             num latitude = item.latitude;
             num longitude = item.longitude;
+            String agenda = item.agenda;
             cardList.add(
               MyCard(image: image,
                   fullName: fullName,
@@ -56,6 +57,7 @@ class CardListState extends State<CardList> {
                   id: id,
                   longitude: longitude,
                   latitude: latitude,
+                agenda: agenda,
               ),
             );
           }
@@ -72,3 +74,42 @@ class CardListState extends State<CardList> {
     );
   }
 }
+//
+// class CardListState extends State<CardList> {
+//
+//   final String checkEmptyMessage = "Nenhum resultado foi encontrado";
+//
+//   String? checkIsEmpty(List? cardList) {
+//     return (cardList == null || cardList.isEmpty) ? checkEmptyMessage : null;
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     List<EspecialistModel> cardList = [];
+//
+//     for (EspecialistModel item in widget.items) {
+//       String image = 'item.image';
+//       String fullName = item.fullName;
+//       String bios = item.bios;
+//       String CRP = item.CRP;
+//       String phoneNumber = item.phoneNumber;
+//       String email = item.email;
+//       String id = item.id;
+//       cardList.add(
+//         MyCard(image: image, fullName: fullName, bios: bios, CRP: CRP, phoneNumber: phoneNumber, email: email, id: id),
+//       );
+//     }
+//
+//     if (checkIsEmpty(cardList) == checkEmptyMessage) {
+//       return const Text(
+//         "Nenhum resultado foi encontrado para a sua busca",
+//         textAlign: TextAlign.center,
+//         style: TextStyle(fontSize: 18),
+//       );
+//     }
+//
+//     return Column(
+//       children: cardList,
+//     );
+//   }
+// }

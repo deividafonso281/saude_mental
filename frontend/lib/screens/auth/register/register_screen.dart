@@ -377,6 +377,7 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
                                       latitude: coordinates["latitude"] ?? 0,
                                       longitude: coordinates["longitude"] ?? 0,
                                       address: _getPostmonCepInfoString(),
+                                      agenda: List.generate(32, (i)=>[]).toString()
                                     ));
                                   } else {
                                     final firestoreDao =
@@ -395,6 +396,7 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
                                       latitude: coordinates["latitude"] ?? 0,
                                       longitude: coordinates["longitude"] ?? 0,
                                       address: _getPostmonCepInfoString(),
+                                      agenda: List.generate(32, (i)=>'14:30').toString(),
                                     ));
                                   }
                                 }
