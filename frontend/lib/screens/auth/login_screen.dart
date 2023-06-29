@@ -13,6 +13,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   final TextEditingController _emailTextController = TextEditingController();
   final TextEditingController _passwordTextContoller = TextEditingController();
@@ -58,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: CircularProgressIndicator(),
                         )
                       : ElevatedButton(
-                          child: const Text('Logar'),
+                          child: const Text('Login'),
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
                               FocusScope.of(context)
@@ -76,8 +77,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                 );
                               } else {
+                                // navigatorKey.currentState?.pushNamedAndRemoveUntil('search_screen', (route) => false);
                                 Navigator.of(context).pushReplacementNamed(
-                                    Routes.cadastro_especialist_screen);
+                                    Routes.search_screen);
                               }
                             }
                           }),
