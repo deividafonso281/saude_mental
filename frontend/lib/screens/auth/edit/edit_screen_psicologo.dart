@@ -5,6 +5,7 @@ import 'package:frontend/providers/database/firebase/firestore_general%20_dao.da
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:frontend/screens/auth/common.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:search_cep/search_cep.dart';
 
 import '../../../models/auth_model.dart';
@@ -27,20 +28,13 @@ class EditScreenPsicologoState extends State<EditScreenPsicologo> {
   String imageUrl = "";
   File? _image;
   String? _selectedGender;
-  // final TextEditingController _nameTextContoller = TextEditingController();
-  // final TextEditingController _emailTextController = TextEditingController();
-  // final TextEditingController _passwordTextContoller = TextEditingController();
-  // final TextEditingController _telefoneTextController = TextEditingController();
-  // final TextEditingController _cepTextController = TextEditingController();
-  // final TextEditingController _birthDateTextController =
-  //     TextEditingController();
 
   // Dados do especialista
   String? _especialization;
   final TextEditingController _biosTextController = TextEditingController();
   final TextEditingController _crptTextController = TextEditingController();
 
-   PostmonCepInfo? _postmonCepInfo;
+  PostmonCepInfo? _postmonCepInfo;
   SearchCepError? _searchCepError;
   String? selectedState;
   String? selectedCity;
@@ -49,6 +43,34 @@ class EditScreenPsicologoState extends State<EditScreenPsicologo> {
   String _getPostmonCepInfoString() {
     return "${_postmonCepInfo!.logradouro}, ${_postmonCepInfo!.cidade} - ${_postmonCepInfo!.estado}, ${_postmonCepInfo!.cep}";
   }
+
+Future<void> _uploadImageToFirebase() async {
+  if (_image == null) return;
+
+  try {
+    // Create a reference to the Firebase Storage bucket
+    final storage = FirebaseStorage.instance;
+    final storageRef = storage.ref();
+
+    // Generate a unique filename for the image
+    final timestamp = DateTime.now().millisecondsSinceEpoch.toString();
+    final filename = 'profile_$timestamp.jpg';
+
+    // Upload the file to the storage bucket
+    final uploadTask = storageRef.child(filename).putFile(_image!);
+    
+    // Wait for the upload to complete
+    final snapshot = await uploadTask.whenComplete(() {});
+
+    // Get the public download URL for the uploaded image
+    imageUrl = await snapshot.ref.getDownloadURL();
+
+    // Do something with the imageUrl (save it to Firebase Firestore, display it in your app, etc.)
+    print('Image uploaded successfully. Download URL: $imageUrl');
+  } catch (error) {
+    print('Error uploading image: $error');
+  }
+}
 
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await ImagePicker().pickImage(source: source);
@@ -80,8 +102,9 @@ class EditScreenPsicologoState extends State<EditScreenPsicologo> {
           final TextEditingController _telefoneTextController = TextEditingController(text: data.phoneNumber);
           final TextEditingController _biosTextController = TextEditingController(text: data.bios);
           final TextEditingController _crptTextController = TextEditingController(text: data.CRP);
+          String? _selectedGender = data.gender.toShortString();
 
-          ImageProvider? imageSource = null;
+          ImageProvider? imageSource;
           if(data.imageUrl != ""){
             imageSource = NetworkImage(data.imageUrl);
           }
@@ -232,15 +255,7 @@ class EditScreenPsicologoState extends State<EditScreenPsicologo> {
 
                                         final firestoreDao = FirestoreDao<EspecialistModel>();
 
-                                         Map<String, double> coordinates =
-                                      await CoordinatesService
-                                              .fetchCoordinatesByAddrees(
-                                                  _postmonCepInfo!.logradouro ??
-                                                      "",
-                                                  _postmonCepInfo!.cidade ?? "",
-                                                  _postmonCepInfo!.estado ?? "",
-                                                  _postmonCepInfo!.cep ?? "") ??
-                                          {};
+                                        await _uploadImageToFirebase();
 
                                         await firestoreDao.setData(
                                           EspecialistModel(
@@ -253,16 +268,16 @@ class EditScreenPsicologoState extends State<EditScreenPsicologo> {
                                             especialization: stringToEspscialization(_especialization!),
                                             bios: _biosTextController.text,
                                             imageUrl: imageUrl, 
-                                            latitude: coordinates["latitude"] ?? 0,
-                                            longitude: coordinates["longitude"] ?? 0,
-                                            address: _getPostmonCepInfoString(),
+                                            latitude: data.latitude,
+                                            longitude: data.longitude,
+                                            address: data.address, 
+                                            agenda: data.agenda,
                                           ),
                                         );
                                         Navigator.of(context).restorablePushNamed(
-                                          Routes.busca_psicologo_screen,
+                                          Routes.search_screen,
                                           );
-                                      }
-                                      
+                                      } 
                                     },
                                     
                                   child: const Text('Salvar'),

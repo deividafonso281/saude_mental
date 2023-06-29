@@ -4,13 +4,13 @@ import 'package:frontend/providers/database/firebase/firestore_general%20_dao.da
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:frontend/screens/auth/common.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:search_cep/search_cep.dart';
+// import 'package:search_cep/search_cep.dart';
 
 import '../../../models/auth_model.dart';
 import '../../../models/user_model.dart';
 import '../../../providers/auth/auth_provider.dart';
-import '../../../providers/geo_services/coordinates_service.dart';
 import '../../../utils/router.dart';
 
 class EditScreenUsuario extends StatefulWidget {
@@ -27,23 +27,16 @@ class EditScreenUsuarioState extends State<EditScreenUsuario> {
   String imageUrl = "";
   File? _image;
   String? _selectedGender;
-  // final TextEditingController _nameTextContoller = TextEditingController();
-  // final TextEditingController _emailTextController = TextEditingController();
-  // final TextEditingController _passwordTextContoller = TextEditingController();
-  // final TextEditingController _telefoneTextController = TextEditingController();
-  // final TextEditingController _cepTextController = TextEditingController();
-  // final TextEditingController _birthDateTextController =
-  //     TextEditingController();
 
-  PostmonCepInfo? _postmonCepInfo;
-  SearchCepError? _searchCepError;
+  // PostmonCepInfo? _postmonCepInfo;
+  // SearchCepError? _searchCepError;
   String? selectedState;
   String? selectedCity;
-  bool _searchingCep = false;
+  // bool _searchingCep = false;
 
-  String _getPostmonCepInfoString() {
-    return "${_postmonCepInfo!.logradouro}, ${_postmonCepInfo!.cidade} - ${_postmonCepInfo!.estado}, ${_postmonCepInfo!.cep}";
-  }
+  // String _getPostmonCepInfoString() {
+  //   return "${_postmonCepInfo!.logradouro}, ${_postmonCepInfo!.cidade} - ${_postmonCepInfo!.estado}, ${_postmonCepInfo!.cep}";
+  // }
   
   var maskFormatter = MaskTextInputFormatter(
     mask: '(##) #####-####', 
@@ -56,6 +49,34 @@ class EditScreenUsuarioState extends State<EditScreenUsuario> {
     filter: { "#": RegExp(r'[0-9]') },
     type: MaskAutoCompletionType.lazy
   );
+
+Future<void> _uploadImageToFirebase() async {
+  if (_image == null) return;
+
+  try {
+    // Create a reference to the Firebase Storage bucket
+    final storage = FirebaseStorage.instance;
+    final storageRef = storage.ref();
+
+    // Generate a unique filename for the image
+    final timestamp = DateTime.now().millisecondsSinceEpoch.toString();
+    final filename = 'profile_$timestamp.jpg';
+
+    // Upload the file to the storage bucket
+    final uploadTask = storageRef.child(filename).putFile(_image!);
+    
+    // Wait for the upload to complete
+    final snapshot = await uploadTask.whenComplete(() {});
+
+    // Get the public download URL for the uploaded image
+    imageUrl = await snapshot.ref.getDownloadURL();
+
+    // Do something with the imageUrl (save it to Firebase Firestore, display it in your app, etc.)
+    print('Image uploaded successfully. Download URL: $imageUrl');
+  } catch (error) {
+    print('Error uploading image: $error');
+  }
+}
 
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await ImagePicker().pickImage(source: source);
@@ -84,6 +105,7 @@ class EditScreenUsuarioState extends State<EditScreenUsuario> {
           final TextEditingController _nameTextContoller = TextEditingController(text: data.fullName);
           final TextEditingController _emailTextController = TextEditingController(text: data.email);
           final TextEditingController _telefoneTextController = TextEditingController(text: data.phoneNumber);
+          String? _selectedGender = data.gender.toShortString();
 
           ImageProvider? imageSource;
           if(data.imageUrl != ""){
@@ -146,6 +168,7 @@ class EditScreenUsuarioState extends State<EditScreenUsuario> {
                           },
                           keyboardType: TextInputType.text,
                         ),
+                        
                         DropdownButtonFormField(
                           value: _selectedGender,
                           items: genderToStringList().map((gender) {
@@ -199,7 +222,7 @@ class EditScreenUsuarioState extends State<EditScreenUsuario> {
 
                                     final firestoreDao = FirestoreDao<UserModel>();
 
-
+                                    await _uploadImageToFirebase();
 
                                     await firestoreDao.setData(
                                         UserModel(
@@ -211,11 +234,12 @@ class EditScreenUsuarioState extends State<EditScreenUsuario> {
                                           imageUrl: imageUrl,
                                           latitude: data.latitude,
                                           longitude: data.longitude,
-                                          address: data.address,
+                                          address: data.address, 
+                                          agenda: data.agenda,
                                         ),
                                       );
                                       Navigator.of(context).restorablePushNamed(
-                                          Routes.busca_psicologo_screen,
+                                          Routes.search_screen,
                                           );
                                     }
                                   },

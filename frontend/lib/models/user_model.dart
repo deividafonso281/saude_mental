@@ -17,7 +17,7 @@ class UserModelConverter implements MapConverter<UserModel> {
       longitude: json["longitude"] ?? 0,
       address: json["address"] ?? "",
       imageUrl: json["imageUrl"],
-      agenda: json["agenda"],
+      agenda: json["agenda"] ?? "",
     );
   }
 
@@ -33,6 +33,7 @@ class UserModelConverter implements MapConverter<UserModel> {
       "longitude": model.longitude,
       "address": model.address,
       "agenda": model.agenda,
+      "imageUrl": model.imageUrl,
     };
   }
 }
@@ -47,6 +48,7 @@ class UserModel extends BaseModel {
   double longitude;
   String address;
   String agenda;
+  String imageUrl;
 
   UserModel({
     required this.id,
@@ -58,6 +60,7 @@ class UserModel extends BaseModel {
     required this.longitude,
     required this.address,
     required this.agenda,
+    required this.imageUrl,
   }) : super(id: id);
 }
 
