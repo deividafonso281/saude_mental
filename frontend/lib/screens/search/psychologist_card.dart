@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../schedule/psychologist_details_screen.dart';
+import 'package:frontend/models/especialist_model.dart';
 
 class MyCard extends StatelessWidget {
   final String image;
@@ -12,6 +13,8 @@ class MyCard extends StatelessWidget {
   final num latitude;
   final num longitude;
   final String agenda;
+  final String availability;
+  final EspecialistModel especialist;
 
   const MyCard({
     Key? key,
@@ -25,6 +28,8 @@ class MyCard extends StatelessWidget {
     required this.latitude,
     required this.longitude,
     required this.agenda,
+    required this.availability,
+    required this.especialist,
   }) : super(key: key);
 
   @override
@@ -45,6 +50,8 @@ class MyCard extends StatelessWidget {
               longitude: longitude,
               latitude: latitude,
               agenda: agenda,
+              availability: availability,
+              especialist: especialist,
             ),
           ),
         );

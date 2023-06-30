@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:frontend/models/especialist_model.dart';
 import 'package:frontend/providers/database/firebase/firestore_general%20_dao.dart';
@@ -377,7 +378,7 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
                                       latitude: coordinates["latitude"] ?? 0,
                                       longitude: coordinates["longitude"] ?? 0,
                                       address: _getPostmonCepInfoString(),
-                                      agenda: List.generate(32, (i)=>[]).toString()
+                                      agenda: jsonEncode(List.generate(32, (i)=>[]))
                                     ));
                                   } else {
                                     final firestoreDao =
@@ -396,7 +397,8 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
                                       latitude: coordinates["latitude"] ?? 0,
                                       longitude: coordinates["longitude"] ?? 0,
                                       address: _getPostmonCepInfoString(),
-                                      agenda: List.generate(32, (i)=>'14:30').toString(),
+                                      agenda: jsonEncode(List.generate(32, (i)=>[])),
+                                      availability: jsonEncode(List.generate(32, (i)=>[]))
                                     ));
                                   }
                                 }
