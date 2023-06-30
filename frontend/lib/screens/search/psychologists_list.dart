@@ -57,7 +57,7 @@ class CardListState extends State<CardList> {
                   id: id,
                   longitude: longitude,
                   latitude: latitude,
-                agenda: agenda,
+                  agenda: agenda,
               ),
             );
           }
