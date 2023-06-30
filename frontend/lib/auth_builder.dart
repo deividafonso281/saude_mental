@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/auth_model.dart';
+import 'package:frontend/models/especialist_model.dart';
+import 'package:frontend/models/user_model.dart';
 import 'package:frontend/providers/auth/auth_provider.dart';
+import 'package:frontend/providers/database/firebase/firestore_general%20_dao.dart';
 import 'package:provider/provider.dart';
 
 /*
@@ -20,23 +23,41 @@ class AuthWidgetBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthProvider>(context, listen: false);
+
     return StreamBuilder<AuthModel>(
       stream: authService.user,
       builder: (BuildContext context, AsyncSnapshot<AuthModel> snapshot) {
         final AuthModel? user = snapshot.data;
+
         if (user != null && authService.status == Status.Authenticated) {
-          /*
-          * For any other Provider services that rely on user data can be
-          * added to the following MultiProvider list.
-          * Once a user has been detected, a re-build will be initiated.
-           */
-          return MultiProvider(
-            providers: [
-              Provider<AuthModel>.value(value: user),
-            ],
-            child: builder(context, snapshot),
+          print("$user chegou aquii");
+          print(user.uid);
+          var str = FirestoreDao<UserModel>().dataStream(todoId: user.uid);
+
+          return StreamBuilder(
+            stream: str,
+            builder: (BuildContext userContext, AsyncSnapshot userSnapshot) {
+              final UserModel? userModel = userSnapshot.data;
+              final error = userSnapshot.error;
+              print(userSnapshot.connectionState);
+              print(userSnapshot.data);
+              print(error);
+              print("$userModel chegou userModel");
+              if (userModel != null) {
+                print(userModel);
+                return MultiProvider(
+                  providers: [
+                    Provider<UserModel>.value(value: userModel),
+                    Provider<AuthModel>.value(value: user),
+                  ],
+                  child: builder(userContext, snapshot),
+                );
+              }
+              return builder(userContext, snapshot);
+            },
           );
         }
+
         return builder(context, snapshot);
       },
     );

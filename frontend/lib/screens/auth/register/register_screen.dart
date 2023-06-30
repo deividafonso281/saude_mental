@@ -101,6 +101,7 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
 
     if (screenRouteArgs == null) {
       final authModel = Provider.of<AuthModel>(context);
+      final userModel = Provider.of<UserModel>(context);
       userType = authModel.userType;
     } else {
       userType = stringToUserType(screenRouteArgs as String);
@@ -396,6 +397,10 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
                                       longitude: coordinates["longitude"] ?? 0,
                                       address: _getPostmonCepInfoString(),
                                     ));
+
+                                    print(await firestoreDao
+                                        .dataStream(todoId: authModel.uid)
+                                        .first);
                                   }
                                 }
                               },

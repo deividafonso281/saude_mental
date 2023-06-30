@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/auth_model.dart';
+import 'package:frontend/models/user_model.dart';
 
 import '../../../utils/router.dart';
 

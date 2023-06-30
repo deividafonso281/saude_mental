@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/models/user_model.dart';
+import 'package:frontend/screens/search/common.dart';
 import 'package:frontend/screens/search/psychologist_card.dart';
+import 'package:provider/provider.dart';
 
 import '../../models/especialist_model.dart';
-
 
 class CardList extends StatefulWidget {
   final Stream<List<EspecialistModel>> items;
@@ -25,6 +27,8 @@ class CardListState extends State<CardList> {
 
   @override
   Widget build(BuildContext context) {
+    final userModel = Provider.of<UserModel>(context);
+
     return StreamBuilder<List<EspecialistModel>>(
       stream: widget.items,
       builder: (context, snapshot) {
@@ -48,18 +52,23 @@ class CardListState extends State<CardList> {
             String phoneNumber = item.phoneNumber;
             String email = item.email;
             String id = item.id;
-            num latitude = item.latitude;
-            num longitude = item.longitude;
+            double latitude = item.latitude;
+            double longitude = item.longitude;
+            double dist = calculateDistance(
+                latitude, longitude, userModel.latitude, userModel.longitude);
+
             cardList.add(
-              MyCard(image: image,
-                  fullName: fullName,
-                  bios: bios,
-                  crp: crp,
-                  phoneNumber: phoneNumber,
-                  email: email,
-                  id: id,
-                  longitude: longitude,
-                  latitude: latitude,
+              MyCard(
+                image: image,
+                fullName: fullName,
+                bios: bios,
+                crp: crp,
+                phoneNumber: phoneNumber,
+                email: email,
+                id: id,
+                longitude: longitude,
+                latitude: latitude,
+                distance: dist,
               ),
             );
           }

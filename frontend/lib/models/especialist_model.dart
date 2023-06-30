@@ -33,6 +33,10 @@ class EspecialistModelConverter implements MapConverter<EspecialistModel> {
       "longitude": model.longitude,
       "especialization": model.especialization.toShortString(),
       "address": model.address,
+      "coordinates": {
+        "latitude": model.latitude,
+        "longitude": model.longitude,
+      },
     };
   }
 }

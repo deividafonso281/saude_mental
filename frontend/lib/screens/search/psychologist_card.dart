@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/models/user_model.dart';
+import 'package:provider/provider.dart';
 import '../schedule/psychologist_details_screen.dart';
 
 class MyCard extends StatelessWidget {
@@ -11,6 +13,7 @@ class MyCard extends StatelessWidget {
   final String id;
   final num latitude;
   final num longitude;
+  final num distance;
 
   const MyCard({
     Key? key,
@@ -23,6 +26,7 @@ class MyCard extends StatelessWidget {
     required this.id,
     required this.latitude,
     required this.longitude,
+    required this.distance,
   }) : super(key: key);
 
   @override
@@ -72,16 +76,15 @@ class MyCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 10),
                   SizedBox(
-                      width: 200,
-                      child:
-                        Text(
-                        fullName,
-                        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 3,
-                        ),
+                    width: 200,
+                    child: Text(
+                      fullName,
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 3,
+                    ),
                   )
-
                 ],
               ),
               const SizedBox(height: 10),
@@ -91,8 +94,8 @@ class MyCard extends StatelessWidget {
                 style: const TextStyle(fontSize: 18),
               ),
               const SizedBox(height: 10),
-              const Text(
-                'A X Km de você',
+              Text(
+                'A $distance Km de você',
                 style: TextStyle(fontSize: 12),
               ),
             ],

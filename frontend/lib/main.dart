@@ -1,5 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:frontend/models/especialist_model.dart';
 import 'package:frontend/providers/auth/auth_provider.dart';
+import 'package:frontend/providers/database/firebase/firestore_general%20_dao.dart';
 import 'package:frontend/providers/geo_services/coordinates_service.dart';
 import 'package:provider/provider.dart';
 import 'app_builder.dart';

@@ -48,9 +48,7 @@ class AuthProvider extends ChangeNotifier {
       return AuthModel(uid: 'null');
     }
 
-    UserType userType = stringToUserType(user.displayName ?? "");
-
-    return AuthModel(uid: user.uid, email: user.email, userType: userType);
+    return AuthModel(uid: user.uid, email: user.email);
   }
 
   //Method to detect live auth changes such as user sign in and sign out
@@ -73,12 +71,6 @@ class AuthProvider extends ChangeNotifier {
 
       final UserCredential result = await auth.createUserWithEmailAndPassword(
           email: email, password: password);
-
-      String? userTypeString = userType.toShortString();
-
-      await result.user?.updateDisplayName(userTypeString);
-
-      print("${result.user!.displayName} ++++++++++++++++");
 
       return _userFromFirebase(result.user);
     } catch (e) {

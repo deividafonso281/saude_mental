@@ -38,12 +38,16 @@ class FirestoreDao<ModelT extends BaseModel> implements DataBase<ModelT> {
 
   //Method to retrieve todoModel object based on the given todoId
   @override
-  Stream<ModelT> dataStream({required String todoId}) =>
-      _firestoreService.documentStream(
-        path: _paths.entity(todoId),
-        builder: (data, documentId) =>
-            _modelConverter.fromMap(data, documentId),
-      );
+  Stream<ModelT> dataStream({required String todoId}) {
+    var out = _firestoreService.documentStream(
+      path: _paths.entity(todoId),
+      builder: (data, documentId) => _modelConverter.fromMap(data, documentId),
+    );
+
+    print("$out esse eh o stream");
+
+    return out;
+  }
 
   //Method to retrieve all todos item from the same user based on uid
   @override

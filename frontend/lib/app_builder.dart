@@ -1,4 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:frontend/models/auth_model.dart';
+import 'package:frontend/models/especialist_model.dart';
+import 'package:frontend/models/user_model.dart';
 import 'package:frontend/providers/auth/auth_provider.dart';
 import 'package:frontend/screens/auth/register/register_screen.dart';
 import 'package:frontend/screens/search/search_screen.dart';
@@ -26,7 +31,10 @@ class MyApp extends StatelessWidget {
               if (userSnapshot.connectionState == ConnectionState.active) {
                 if (userSnapshot.hasData &&
                     authProvider.status == Status.Authenticated) {
-                  return userSnapshot.data?.userType != UserType.Especialist
+                  final userModel = Provider.of<AuthModel>(context);
+
+                  print(" $userModel");
+                  return userModel.runtimeType != EspecialistModel
                       ? const SearchScreen()
                       : const CadastroTerapeuta();
                 } else {
