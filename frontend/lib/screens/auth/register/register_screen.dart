@@ -43,45 +43,51 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
   final TextEditingController _biosTextController = TextEditingController();
   final TextEditingController _crptTextController = TextEditingController();
 
-   var maskFormatter = MaskTextInputFormatter(
-    mask: '(##) #####-####', 
+  var maskFormatter = MaskTextInputFormatter(
+    mask: '(##) #####-####',
     filter: { "#": RegExp(r'[0-9]') },
     type: MaskAutoCompletionType.lazy
   );
 
   var formatterCRP = MaskTextInputFormatter(
-    mask: '##/################', 
+    mask: '##/################',
     filter: { "#": RegExp(r'[0-9]') },
     type: MaskAutoCompletionType.lazy
   );
 
-Future<void> _uploadImageToFirebase() async {
-  if (_image == null) return;
+  var dataFormatter = MaskTextInputFormatter(
+      mask: '##/##/####',
+      filter: { "#": RegExp(r'[0-9]') },
+      type: MaskAutoCompletionType.lazy
+  );
 
-  try {
-    // Create a reference to the Firebase Storage bucket
-    final storage = FirebaseStorage.instance;
-    final storageRef = storage.ref();
+  Future<void> _uploadImageToFirebase() async {
+    if (_image == null) return;
 
-    // Generate a unique filename for the image
-    final timestamp = DateTime.now().millisecondsSinceEpoch.toString();
-    final filename = 'profile_$timestamp.jpg';
+    try {
+      // Create a reference to the Firebase Storage bucket
+      final storage = FirebaseStorage.instance;
+      final storageRef = storage.ref();
 
-    // Upload the file to the storage bucket
-    final uploadTask = storageRef.child(filename).putFile(_image!);
-    
-    // Wait for the upload to complete
-    final snapshot = await uploadTask.whenComplete(() {});
+      // Generate a unique filename for the image
+      final timestamp = DateTime.now().millisecondsSinceEpoch.toString();
+      final filename = 'profile_$timestamp.jpg';
 
-    // Get the public download URL for the uploaded image
-    imageUrl = await snapshot.ref.getDownloadURL();
+      // Upload the file to the storage bucket
+      final uploadTask = storageRef.child(filename).putFile(_image!);
 
-    // Do something with the imageUrl (save it to Firebase Firestore, display it in your app, etc.)
-    print('Image uploaded successfully. Download URL: $imageUrl');
-  } catch (error) {
-    print('Error uploading image: $error');
+      // Wait for the upload to complete
+      final snapshot = await uploadTask.whenComplete(() {});
+
+      // Get the public download URL for the uploaded image
+      imageUrl = await snapshot.ref.getDownloadURL();
+
+      // Do something with the imageUrl (save it to Firebase Firestore, display it in your app, etc.)
+      print('Image uploaded successfully. Download URL: $imageUrl');
+    } catch (error) {
+      print('Error uploading image: $error');
+    }
   }
-}
 
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await ImagePicker().pickImage(source: source);
@@ -212,9 +218,9 @@ Future<void> _uploadImageToFirebase() async {
                         ),
                         keyboardType: TextInputType.datetime,
                         validator: (campo) {
-
-                          return checkIsEmpty(campo);
+                          return validateBirthDate(campo);
                         },
+                        inputFormatters: [dataFormatter],
                       ),
                       DropdownButtonFormField(
                         value: _selectedGender,
