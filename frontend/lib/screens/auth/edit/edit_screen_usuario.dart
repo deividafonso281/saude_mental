@@ -235,7 +235,8 @@ Future<void> _uploadImageToFirebase() async {
                                           latitude: data.latitude,
                                           longitude: data.longitude,
                                           address: data.address, 
-                                          agenda: data.agenda,
+                                          agenda: data.agenda, 
+                                          dataNascimento: data.dataNascimento,
                                         ),
                                       );
                                       Navigator.of(context).restorablePushNamed(

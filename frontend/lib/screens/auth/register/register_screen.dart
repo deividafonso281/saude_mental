@@ -10,6 +10,7 @@ import 'package:search_cep/search_cep.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../../../models/auth_model.dart';
 import '../../../models/user_model.dart';
@@ -35,8 +36,7 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
   final TextEditingController _passwordTextContoller = TextEditingController();
   final TextEditingController _telefoneTextController = TextEditingController();
   final TextEditingController _cepTextController = TextEditingController();
-  final TextEditingController _birthDateTextController =
-      TextEditingController();
+  final TextEditingController _birthDateTextController = TextEditingController();
 
   // Dados do especialista
   String? _especialization;
@@ -49,8 +49,8 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
     type: MaskAutoCompletionType.lazy
   );
 
-  var dataFormatter = MaskTextInputFormatter(
-    mask: '##/##/####', 
+  var formatterCRP = MaskTextInputFormatter(
+    mask: '##/################', 
     filter: { "#": RegExp(r'[0-9]') },
     type: MaskAutoCompletionType.lazy
   );
@@ -212,9 +212,9 @@ Future<void> _uploadImageToFirebase() async {
                         ),
                         keyboardType: TextInputType.datetime,
                         validator: (campo) {
+
                           return checkIsEmpty(campo);
                         },
-                        inputFormatters: [dataFormatter],
                       ),
                       DropdownButtonFormField(
                         value: _selectedGender,
@@ -344,6 +344,7 @@ Future<void> _uploadImageToFirebase() async {
                               decoration: const InputDecoration(
                                 labelText: 'CRP',
                               ),
+                              inputFormatters: [formatterCRP],
                               validator: (campo) {
                                 return checkIsEmpty(campo);
                               },
@@ -421,6 +422,7 @@ Future<void> _uploadImageToFirebase() async {
                                       fullName: _nameTextContoller.text,
                                       gender: stringToGender(_selectedGender!),
                                       phoneNumber: _telefoneTextController.text,
+                                      dataNascimento: stringToDate(_birthDateTextController.text),
                                       latitude: coordinates["latitude"] ?? 0,
                                       longitude: coordinates["longitude"] ?? 0,
                                       address: _getPostmonCepInfoString(),
@@ -437,6 +439,7 @@ Future<void> _uploadImageToFirebase() async {
                                       fullName: _nameTextContoller.text,
                                       gender: stringToGender(_selectedGender!),
                                       phoneNumber: _telefoneTextController.text,
+                                      dataNascimento: stringToDate(_birthDateTextController.text),
                                       CRP: _crptTextController.text,
                                       especialization: stringToEspscialization(
                                           _especialization!),
