@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:frontend/models/especialist_model.dart';
 import 'package:frontend/providers/database/firebase/firestore_general%20_dao.dart';
 import 'package:frontend/providers/geo_services/coordinates_service.dart';
+import 'package:frontend/providers/storage/firebase_storoge.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:frontend/screens/auth/common.dart';
 import 'package:search_cep/search_cep.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:flutter/cupertino.dart';
@@ -29,59 +29,29 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
   final _formKey = GlobalKey<FormState>();
 
   File? _image;
-  String imageUrl = "";
   String? _selectedGender;
   final TextEditingController _nameTextContoller = TextEditingController();
   final TextEditingController _emailTextController = TextEditingController();
   final TextEditingController _passwordTextContoller = TextEditingController();
   final TextEditingController _telefoneTextController = TextEditingController();
   final TextEditingController _cepTextController = TextEditingController();
-  final TextEditingController _birthDateTextController = TextEditingController();
+  final TextEditingController _birthDateTextController =
+      TextEditingController();
 
   // Dados do especialista
   String? _especialization;
   final TextEditingController _biosTextController = TextEditingController();
   final TextEditingController _crptTextController = TextEditingController();
 
-   var maskFormatter = MaskTextInputFormatter(
-    mask: '(##) #####-####', 
-    filter: { "#": RegExp(r'[0-9]') },
-    type: MaskAutoCompletionType.lazy
-  );
+  var maskFormatter = MaskTextInputFormatter(
+      mask: '(##) #####-####',
+      filter: {"#": RegExp(r'[0-9]')},
+      type: MaskAutoCompletionType.lazy);
 
   var formatterCRP = MaskTextInputFormatter(
-    mask: '##/################', 
-    filter: { "#": RegExp(r'[0-9]') },
-    type: MaskAutoCompletionType.lazy
-  );
-
-Future<void> _uploadImageToFirebase() async {
-  if (_image == null) return;
-
-  try {
-    // Create a reference to the Firebase Storage bucket
-    final storage = FirebaseStorage.instance;
-    final storageRef = storage.ref();
-
-    // Generate a unique filename for the image
-    final timestamp = DateTime.now().millisecondsSinceEpoch.toString();
-    final filename = 'profile_$timestamp.jpg';
-
-    // Upload the file to the storage bucket
-    final uploadTask = storageRef.child(filename).putFile(_image!);
-    
-    // Wait for the upload to complete
-    final snapshot = await uploadTask.whenComplete(() {});
-
-    // Get the public download URL for the uploaded image
-    imageUrl = await snapshot.ref.getDownloadURL();
-
-    // Do something with the imageUrl (save it to Firebase Firestore, display it in your app, etc.)
-    print('Image uploaded successfully. Download URL: $imageUrl');
-  } catch (error) {
-    print('Error uploading image: $error');
-  }
-}
+      mask: '##/################',
+      filter: {"#": RegExp(r'[0-9]')},
+      type: MaskAutoCompletionType.lazy);
 
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await ImagePicker().pickImage(source: source);
@@ -212,7 +182,6 @@ Future<void> _uploadImageToFirebase() async {
                         ),
                         keyboardType: TextInputType.datetime,
                         validator: (campo) {
-
                           return checkIsEmpty(campo);
                         },
                       ),
@@ -237,15 +206,16 @@ Future<void> _uploadImageToFirebase() async {
                         ),
                       ),
                       TextFormField(
-                          controller: _telefoneTextController,
-                          decoration: const InputDecoration(
-                            labelText: 'Telefone *',
-                          ),
-                          keyboardType: TextInputType.phone,
-                          validator: (campo) {
-                            return checkIsEmpty(campo);
-                          },
-                          inputFormatters: [maskFormatter],),
+                        controller: _telefoneTextController,
+                        decoration: const InputDecoration(
+                          labelText: 'Telefone *',
+                        ),
+                        keyboardType: TextInputType.phone,
+                        validator: (campo) {
+                          return checkIsEmpty(campo);
+                        },
+                        inputFormatters: [maskFormatter],
+                      ),
                       TextFormField(
                         controller: _emailTextController,
                         decoration: const InputDecoration(
@@ -410,36 +380,44 @@ Future<void> _uploadImageToFirebase() async {
                                                   _postmonCepInfo!.estado ?? "",
                                                   _postmonCepInfo!.cep ?? "") ??
                                           {};
-                                  await _uploadImageToFirebase();
-                                  
+
+                                  String imageUrl = await StorageService
+                                          .uploadImageToFirebase(_image) ??
+                                      "";
+
                                   if (userType == UserType.Patient) {
                                     final firestoreDao =
                                         FirestoreDao<UserModel>();
 
                                     await firestoreDao.setData(UserModel(
-                                      id: authModel.uid,
-                                      email: _emailTextController.text,
-                                      fullName: _nameTextContoller.text,
-                                      gender: stringToGender(_selectedGender!),
-                                      phoneNumber: _telefoneTextController.text,
-                                      dataNascimento: stringToDate(_birthDateTextController.text),
-                                      latitude: coordinates["latitude"] ?? 0,
-                                      longitude: coordinates["longitude"] ?? 0,
-                                      address: _getPostmonCepInfoString(),
-                                      imageUrl: imageUrl,
-                                      agenda: List.generate(32, (i)=>[]).toString()
-                                    ));
+                                        id: authModel.uid,
+                                        email: _emailTextController.text,
+                                        fullName: _nameTextContoller.text,
+                                        gender:
+                                            stringToGender(_selectedGender!),
+                                        phoneNumber:
+                                            _telefoneTextController.text,
+                                        dataNascimento: stringToDate(
+                                            _birthDateTextController.text),
+                                        latitude: coordinates["latitude"] ?? 0,
+                                        longitude:
+                                            coordinates["longitude"] ?? 0,
+                                        address: _getPostmonCepInfoString(),
+                                        imageUrl: imageUrl,
+                                        agenda: List.generate(32, (i) => [])
+                                            .toString()));
                                   } else {
                                     final firestoreDao =
                                         FirestoreDao<EspecialistModel>();
-                                    
+
                                     await firestoreDao.setData(EspecialistModel(
                                       id: authModel.uid,
                                       email: _emailTextController.text,
                                       fullName: _nameTextContoller.text,
                                       gender: stringToGender(_selectedGender!),
                                       phoneNumber: _telefoneTextController.text,
-                                      dataNascimento: stringToDate(_birthDateTextController.text),
+                                      dataNascimento: stringToDate(
+                                          _birthDateTextController.text),
                                       CRP: _crptTextController.text,
                                       especialization: stringToEspscialization(
                                           _especialization!),
@@ -448,7 +426,8 @@ Future<void> _uploadImageToFirebase() async {
                                       longitude: coordinates["longitude"] ?? 0,
                                       address: _getPostmonCepInfoString(),
                                       imageUrl: imageUrl,
-                                      agenda: List.generate(32, (i)=>'14:30').toString(),
+                                      agenda: List.generate(32, (i) => '14:30')
+                                          .toString(),
                                     ));
                                   }
                                 }
