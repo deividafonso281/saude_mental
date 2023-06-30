@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/screens/auth/common.dart';
 import 'package:frontend/screens/auth/register/register_screen.dart';
 import 'package:test/test.dart';
+import 'package:intl/intl.dart';
 
 void main() {
 
@@ -19,11 +20,22 @@ void main() {
 
     });
 
+    test('should not return error when password has more than six and less than twelve characters', () {
+
+      expect(checkPasswordSizeNotMinimum('1234567'), null);
+      expect(checkPasswordSizeNotMinimum('12345678'), null);
+      expect(checkPasswordSizeNotMinimum('123456789'), null);
+      expect(checkPasswordSizeNotMinimum('1234567890'), null);
+      expect(checkPasswordSizeNotMinimum('12345678901'), null);
+      expect(checkPasswordSizeNotMinimum('123456789012'), null);
+
+    });
+
     test('should return error when password has more than eleven characters', () {
       
-      expect(checkPasswordSizeNotmaximum('012345678910'), null);
-      expect(checkPasswordSizeNotmaximum('1234567891011'), checkMaximumLengthMessage);
-      expect(checkPasswordSizeNotmaximum('01234567891011'), checkMaximumLengthMessage);
+      expect(checkPasswordSizeNotmaximum('123456789101'), null);
+      expect(checkPasswordSizeNotmaximum('1234567891012'), checkMaximumLengthMessage);
+      expect(checkPasswordSizeNotmaximum('12345678910123'), checkMaximumLengthMessage);
 
     });
   });
@@ -40,6 +52,14 @@ void main() {
       expect(checkBiosSizeNotMinimum('Respeito'), checkBiosMinimo);
       expect(checkBiosSizeNotMinimum('Bem vindo'), checkBiosMinimo);
       expect(checkBiosSizeNotMaximum('Olá amigos'), null);
+
+    });
+
+    test('should not return error when Bios has more than 9 and less than 201 characters', () {
+
+      expect(checkBiosSizeNotMinimum('Olá! Eu sou um psicólogo residente em São Paulo.'), null);
+      expect(checkBiosSizeNotMinimum('Olá! Eu sou um psicólogo residente em São Paulo, busco te ajudar a ser o seu melhor eu e superar desafios. '), null);
+      expect(checkBiosSizeNotMaximum('Olá! Eu sou um psicólogo residente em São Paulo, busco te ajudar a ser o seu melhor eu e superar desafios. Qualquer dúvida pode me chamar, espero poder trabalhar contigo'), null);
 
     });
 
@@ -69,11 +89,52 @@ void main() {
       expect(checkCRPSizeNotMinimum('001'), null);
     });
 
+    test('should not return error when CRP has more than two and less than nine characters', () {
+
+      expect(checkCRPSizeNotMinimum('123'), null);
+      expect(checkCRPSizeNotMinimum('1234'), null);
+      expect(checkCRPSizeNotMinimum('12345'), null);
+      expect(checkCRPSizeNotMinimum('123456'), null);
+      expect(checkCRPSizeNotMinimum('1234567'), null);
+      expect(checkCRPSizeNotMinimum('12345678'), null);
+    });
+
     test('should return error when CRP has more than eight characters', () {
 
       expect(checkCRPSizeNotmaximum('06123457'), null);
       expect(checkCRPSizeNotmaximum('061234567'), checkCRPMaximo);
       expect(checkCRPSizeNotmaximum('0612345678'), checkCRPMaximo);
+    });
+
+  });
+
+  // Scenario #	     Test Scenario Description	               Expected Outcome
+  //    1	       Input date is before 1900	               System should not accept
+  //    2	       Input date is between 1900 and today	     System should accept
+  //    3	       Input date in after today	               System should not accept
+
+  group('ValidaDataNascimento', (){
+
+    test('should return error when birth date is before 1900', () {
+
+      expect(validateBirthDate('30/12/1899'), checkDateYear);
+      expect(validateBirthDate('31/12/1899'), checkDateYear);
+      expect(validateBirthDate('01/01/1900'), null);
+    });
+
+    test('should return error when birth date is anfter 1900 and before today', () {
+
+      expect(validateBirthDate('31/12/1899'), checkDateYear);
+      expect(validateBirthDate('01/01/1900'), null);
+    });
+
+    test('should return error when birth date is after today', () {
+      DateTime now = DateTime.now();
+      DateTime tomorrow = DateTime.now().add(Duration(days: 1));
+      DateTime afterTomorrow = DateTime.now().add(Duration(days: 2));
+      expect(validateBirthDate(DateFormat('dd/MM/yyyy').format(now)), null);
+      expect(validateBirthDate(DateFormat('dd/MM/yyyy').format(tomorrow)), checkDateYear);
+      expect(validateBirthDate(DateFormat('dd/MM/yyyy').format(afterTomorrow)), checkDateYear);
     });
 
   });
