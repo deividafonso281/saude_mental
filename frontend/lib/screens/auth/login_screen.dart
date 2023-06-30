@@ -50,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     decoration: const InputDecoration(
                       labelText: "Senha",
                     ),
-                    validator: (campo) => checkPasswordSize(campo),
+                    //validator: (campo) => checkPasswordSize(campo),
                     obscureText: true,
                   ),
                   const SizedBox(height: 18),
