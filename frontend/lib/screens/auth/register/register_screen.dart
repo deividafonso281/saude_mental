@@ -2,12 +2,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:frontend/models/especialist_model.dart';
 import 'package:frontend/providers/database/firebase/firestore_general%20_dao.dart';
+import 'package:frontend/providers/geo_services/cep_service.dart';
 import 'package:frontend/providers/geo_services/coordinates_service.dart';
 import 'package:frontend/providers/storage/firebase_storoge.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:frontend/screens/auth/common.dart';
-import 'package:search_cep/search_cep.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:flutter/cupertino.dart';
@@ -60,47 +60,23 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
     });
   }
 
-  PostmonCepInfo? _postmonCepInfo;
-  SearchCepError? _searchCepError;
+  CepInfo? _cepInfo;
   String? selectedState;
   String? selectedCity;
   bool _searchingCep = false;
 
   String _getPostmonCepInfoString() {
-    return "${_postmonCepInfo!.logradouro}, ${_postmonCepInfo!.cidade} - ${_postmonCepInfo!.estado}, ${_postmonCepInfo!.cep}";
+    return "${_cepInfo!.logradouro}, ${_cepInfo!.cidade} - ${_cepInfo!.estado}, ${_cepInfo!.cep}";
   }
 
   void _changeCepInfo() async {
     var cep = _cepTextController.text;
 
-    if (_cepTextController.text.isEmpty) {
-      setState(() {
-        _searchCepError = null;
-        _postmonCepInfo = null;
-      });
-
-      return;
-    }
-
-    var postmonSearchCep = PostmonSearchCep();
-
     setState(() {
       _searchingCep = true;
     });
 
-    var postmonCepInfo = (await postmonSearchCep.searchInfoByCep(cep: cep));
-
-    postmonCepInfo.fold((l) {
-      setState(() {
-        _searchCepError = l;
-        _postmonCepInfo = null;
-      });
-    }, (r) {
-      setState(() {
-        _postmonCepInfo = r;
-        _searchCepError = null;
-      });
-    });
+    _cepInfo = (await CepService.getAddressByCep(cep));
 
     setState(() {
       _searchingCep = false;
@@ -266,8 +242,8 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
                         ),
                         onChanged: (String e) => _changeCepInfo(),
                         validator: (campo) {
-                          if (_searchCepError != null) {
-                            String out = _searchCepError!.errorMessage;
+                          if (_cepInfo != null && !_cepInfo!.hasData) {
+                            String out = _cepInfo!.errorMessage ?? "";
                             return null;
                           }
                           String? out = checkIsEmpty(campo);
@@ -277,7 +253,7 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
                           return null;
                         },
                       ),
-                      _searchCepError != null || _postmonCepInfo != null
+                      _cepInfo != null
                           ? Column(
                               children: [
                                 const SizedBox(
@@ -293,8 +269,8 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
                                               BorderRadius.circular(5.0),
                                         ),
                                         child: Text(
-                                          _searchCepError != null
-                                              ? _searchCepError!.errorMessage
+                                          !_cepInfo!.hasData
+                                              ? _cepInfo!.errorMessage ?? ""
                                               : _getPostmonCepInfoString(),
                                           style: const TextStyle(
                                             fontSize: 16.0,
@@ -374,11 +350,10 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
                                   Map<String, double> coordinates =
                                       await CoordinatesService
                                               .fetchCoordinatesByAddrees(
-                                                  _postmonCepInfo!.logradouro ??
-                                                      "",
-                                                  _postmonCepInfo!.cidade ?? "",
-                                                  _postmonCepInfo!.estado ?? "",
-                                                  _postmonCepInfo!.cep ?? "") ??
+                                                  _cepInfo!.logradouro ?? "",
+                                                  _cepInfo!.cidade ?? "",
+                                                  _cepInfo!.estado ?? "",
+                                                  _cepInfo!.cep ?? "") ??
                                           {};
 
                                   String imageUrl = await StorageService
