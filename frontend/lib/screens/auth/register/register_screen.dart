@@ -243,7 +243,6 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
                         onChanged: (String e) => _changeCepInfo(),
                         validator: (campo) {
                           if (_cepInfo != null && !_cepInfo!.hasData) {
-                            String out = _cepInfo!.errorMessage ?? "";
                             return null;
                           }
                           String? out = checkIsEmpty(campo);

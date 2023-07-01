@@ -82,8 +82,10 @@ class FirestoreDao<ModelT extends BaseModel> implements DataBase<ModelT> {
     await batchDelete.commit();
   }
 
-   @override
+  @override
   Future<ModelT> getById({required String modelId}) async {
-    return await _firestoreService.getById(path: _paths.entity(modelId), builder: (data, id) => _modelConverter.fromMap(data, id));
+    return await _firestoreService.getById(
+        path: _paths.entity(modelId),
+        builder: (data, id) => _modelConverter.fromMap(data, id));
   }
 }
