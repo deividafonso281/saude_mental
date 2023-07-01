@@ -17,8 +17,9 @@ class EspecialistModelConverter implements MapConverter<EspecialistModel> {
       longitude: json["longitude"],
       address: json["address"],
       agenda: json["agenda"],
+      availability: json["availability"],
       imageUrl: json["imageUrl"], 
-      dataNascimento: stringToDate(json["dataNascimento"]),
+      dataNascimento: stringToDate(json["dataNascimento"])
     );
   }
 
@@ -36,7 +37,8 @@ class EspecialistModelConverter implements MapConverter<EspecialistModel> {
       "longitude": model.longitude,
       "especialization": model.especialization.toShortString(),
       "address": model.address,
-      "agenda": model.toString(),
+      "agenda": model.agenda,
+      "availability": model.availability,
       "imageUrl": model.imageUrl,
       "dataNascimento": model.dataNascimento,
     };
@@ -47,11 +49,13 @@ class EspecialistModel extends UserModel {
   Especialization especialization;
   String CRP;
   String bios;
+  String availability;
 
   EspecialistModel({
     required this.especialization,
     required this.CRP,
     required this.bios,
+    required this.availability,
     required super.id,
     required super.email,
     required super.fullName,

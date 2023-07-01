@@ -3,7 +3,6 @@ import 'package:frontend/screens/search/reservation_arguments.dart';
 import 'package:frontend/utils/router.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:frontend/utils/router.dart';
-import 'package:frontend/utils/reservation_parameters.dart';
 
 class PsyDetailsScreen extends StatefulWidget {
   final String image;
@@ -16,6 +15,8 @@ class PsyDetailsScreen extends StatefulWidget {
   final num latitude;
   final num longitude;
   final String agenda;
+  final String availability;
+  final especialist;
 
    PsyDetailsScreen({
     Key? key,
@@ -29,6 +30,8 @@ class PsyDetailsScreen extends StatefulWidget {
     required this.latitude,
     required this.longitude,
      required this.agenda,
+     required this.availability,
+     required this.especialist,
   }) : super(key: key);
 
   @override
@@ -118,6 +121,8 @@ class PsyDetailsScreenState extends State<PsyDetailsScreen> {
                         widget.fullName,
                         widget.id,
                           widget.agenda,
+                        widget.availability,
+                        widget.especialist,
                       ),
                     );
                   },

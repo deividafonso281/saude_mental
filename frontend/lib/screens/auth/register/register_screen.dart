@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:frontend/models/especialist_model.dart';
 import 'package:frontend/providers/database/firebase/firestore_general%20_dao.dart';
@@ -370,6 +371,7 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
                                         FirestoreDao<UserModel>();
 
                                     await firestoreDao.setData(UserModel(
+
                                         id: authModel.uid,
                                         email: _emailTextController.text,
                                         fullName: _nameTextContoller.text,
@@ -384,8 +386,8 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
                                             coordinates["longitude"] ?? 0,
                                         address: _getPostmonCepInfoString(),
                                         imageUrl: imageUrl,
-                                        agenda: List.generate(32, (i) => [])
-                                            .toString()));
+                                        agenda: jsonEncode(List.generate(32, (i)=>[]))
+                                          ));
                                   } else {
                                     final firestoreDao =
                                         FirestoreDao<EspecialistModel>();
@@ -405,9 +407,9 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
                                       latitude: coordinates["latitude"] ?? 0,
                                       longitude: coordinates["longitude"] ?? 0,
                                       address: _getPostmonCepInfoString(),
+                                      agenda: jsonEncode(List.generate(32, (i)=>[])),
+                                      availability: jsonEncode(List.generate(32, (i)=>[]))
                                       imageUrl: imageUrl,
-                                      agenda: List.generate(32, (i) => '14:30')
-                                          .toString(),
                                     ));
                                   }
                                 }

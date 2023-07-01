@@ -41,7 +41,9 @@ class Routes {
         id: '',
         longitude: 0,
         latitude: 0,
-        agenda: '',),
+        agenda: '',
+        availability: '',
+    especialist: '',),
     reservation_screen: (BuildContext context) => const ReservationScreen(),
   };
 }
