@@ -18,6 +18,8 @@ class EspecialistModelConverter implements MapConverter<EspecialistModel> {
       address: json["address"],
       agenda: json["agenda"],
       availability: json["availability"],
+      imageUrl: json["imageUrl"], 
+      dataNascimento: stringToDate(json["dataNascimento"])
     );
   }
 
@@ -37,6 +39,8 @@ class EspecialistModelConverter implements MapConverter<EspecialistModel> {
       "address": model.address,
       "agenda": model.agenda,
       "availability": model.availability,
+      "imageUrl": model.imageUrl,
+      "dataNascimento": model.dataNascimento,
     };
   }
 }
@@ -61,6 +65,8 @@ class EspecialistModel extends UserModel {
     required super.longitude,
     required super.address,
     required super.agenda,
+    required super.imageUrl, 
+    required super.dataNascimento,
   });
 }
 

@@ -3,6 +3,7 @@
 import 'package:frontend/models/base_model.dart';
 import 'package:frontend/models/convertos/map_converter_interface.dart';
 import 'dart:convert';
+import 'package:intl/intl.dart';
 
 class UserModelConverter implements MapConverter<UserModel> {
   @override
@@ -13,10 +14,12 @@ class UserModelConverter implements MapConverter<UserModel> {
       fullName: json["fullName"],
       gender: stringToGender(json["gender"]),
       phoneNumber: json["phoneNumber"],
-      latitude: json["latitude"],
-      longitude: json["longitude"],
-      address: json["address"],
-      agenda: json["agenda"],
+      latitude: json["latitude"] ?? 0,
+      longitude: json["longitude"] ?? 0,
+      address: json["address"] ?? "",
+      imageUrl: json["imageUrl"],
+      agenda: json["agenda"] ?? "",
+      dataNascimento: stringToDate(json["dataNascimento"])
     );
   }
 
@@ -32,6 +35,8 @@ class UserModelConverter implements MapConverter<UserModel> {
       "longitude": model.longitude,
       "address": model.address,
       "agenda": model.agenda,
+      "imageUrl": model.imageUrl,
+      "dataNascimento": model.dataNascimento,
     };
   }
 }
@@ -46,6 +51,8 @@ class UserModel extends BaseModel {
   double longitude;
   String address;
   String agenda;
+  String imageUrl;
+  DateTime dataNascimento;
 
   UserModel({
     required this.id,
@@ -57,6 +64,8 @@ class UserModel extends BaseModel {
     required this.longitude,
     required this.address,
     required this.agenda,
+    required this.imageUrl, 
+    required this.dataNascimento,
   }) : super(id: id);
 }
 
@@ -96,6 +105,10 @@ Gender stringToGender(String gender) {
     default:
       return Gender.NonBinary;
   }
+}
+
+DateTime stringToDate(String dataNascimento) {
+  return DateFormat("dd/MM/yyyy").parse(dataNascimento);
 }
 
 List<List<String>> stringToAgenda(String ag) {
