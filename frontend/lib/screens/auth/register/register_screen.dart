@@ -160,6 +160,7 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
                         validator: (campo) {
                           return checkIsEmpty(campo);
                         },
+                        inputFormatters: [dataFormatter],
                       ),
                       DropdownButtonFormField(
                         value: _selectedGender,

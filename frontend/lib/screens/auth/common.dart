@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 const int minimumPasswordSize = 7;
 const int maximumPasswordSize = 12;
@@ -21,6 +22,7 @@ const String checkCRPNumero = "O CRP só pode conter números";
 
 const String checkBiosMaximo = "A bio pode ter no máximo 200 caracteres";
 const String checkBiosMinimo = "A bio precisa ter no máximo 10 caracteres";
+const String checkDateYear = 'Insira uma data entre 1900 e hoje';
 
 String? checkIsEmpty(String? campo) {
   return (campo == null || campo.isEmpty) ? checkEmptyMessage : null;
@@ -118,4 +120,29 @@ String? checkBiosSizeNotMaximum(String? campo) {
   return (campo != null && campo.length > maximumBiosSize)
       ? checkBiosMaximo
       : null;
+}
+
+String? validateBirthDate(String? campo) {
+
+  var isEmpty = checkIsEmpty(campo);
+
+  if (isEmpty == null) {
+    // Converter a string da data em um objeto DateTime
+    final inputDate = DateFormat('dd/MM/yyyy').parse(campo ?? '');
+
+    // Definir as datas mínima e máxima permitidas
+    final minDate = DateTime(1900);
+    final maxDate = DateTime.now();
+
+    // Verificar se a data está fora do intervalo permitido
+    if (inputDate.isBefore(minDate) || inputDate.isAfter(maxDate)) {
+      return checkDateYear;
+    }
+
+    // Retornar null se a data for válida
+    return null;
+  } else {
+    return isEmpty;
+  }
+
 }
