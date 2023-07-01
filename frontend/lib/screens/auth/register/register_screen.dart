@@ -2,12 +2,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:frontend/models/especialist_model.dart';
 import 'package:frontend/providers/database/firebase/firestore_general%20_dao.dart';
+import 'package:frontend/providers/geo_services/cep_service.dart';
 import 'package:frontend/providers/geo_services/coordinates_service.dart';
+import 'package:frontend/providers/storage/firebase_storoge.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:frontend/screens/auth/common.dart';
-import 'package:search_cep/search_cep.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:flutter/cupertino.dart';
@@ -29,14 +29,14 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
   final _formKey = GlobalKey<FormState>();
 
   File? _image;
-  String imageUrl = "";
   String? _selectedGender;
   final TextEditingController _nameTextContoller = TextEditingController();
   final TextEditingController _emailTextController = TextEditingController();
   final TextEditingController _passwordTextContoller = TextEditingController();
   final TextEditingController _telefoneTextController = TextEditingController();
   final TextEditingController _cepTextController = TextEditingController();
-  final TextEditingController _birthDateTextController = TextEditingController();
+  final TextEditingController _birthDateTextController =
+      TextEditingController();
 
   // Dados do especialista
   String? _especialization;
@@ -44,50 +44,19 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
   final TextEditingController _crptTextController = TextEditingController();
 
   var maskFormatter = MaskTextInputFormatter(
-    mask: '(##) #####-####',
-    filter: { "#": RegExp(r'[0-9]') },
-    type: MaskAutoCompletionType.lazy
-  );
+      mask: '(##) #####-####',
+      filter: {"#": RegExp(r'[0-9]')},
+      type: MaskAutoCompletionType.lazy);
 
   var formatterCRP = MaskTextInputFormatter(
-    mask: '##/################',
-    filter: { "#": RegExp(r'[0-9]') },
-    type: MaskAutoCompletionType.lazy
-  );
+      mask: '##/################',
+      filter: {"#": RegExp(r'[0-9]')},
+      type: MaskAutoCompletionType.lazy);
 
   var dataFormatter = MaskTextInputFormatter(
       mask: '##/##/####',
-      filter: { "#": RegExp(r'[0-9]') },
-      type: MaskAutoCompletionType.lazy
-  );
-
-  Future<void> _uploadImageToFirebase() async {
-    if (_image == null) return;
-
-    try {
-      // Create a reference to the Firebase Storage bucket
-      final storage = FirebaseStorage.instance;
-      final storageRef = storage.ref();
-
-      // Generate a unique filename for the image
-      final timestamp = DateTime.now().millisecondsSinceEpoch.toString();
-      final filename = 'profile_$timestamp.jpg';
-
-      // Upload the file to the storage bucket
-      final uploadTask = storageRef.child(filename).putFile(_image!);
-
-      // Wait for the upload to complete
-      final snapshot = await uploadTask.whenComplete(() {});
-
-      // Get the public download URL for the uploaded image
-      imageUrl = await snapshot.ref.getDownloadURL();
-
-      // Do something with the imageUrl (save it to Firebase Firestore, display it in your app, etc.)
-      print('Image uploaded successfully. Download URL: $imageUrl');
-    } catch (error) {
-      print('Error uploading image: $error');
-    }
-  }
+      filter: {"#": RegExp(r'[0-9]')},
+      type: MaskAutoCompletionType.lazy);
 
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await ImagePicker().pickImage(source: source);
@@ -96,47 +65,23 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
     });
   }
 
-  PostmonCepInfo? _postmonCepInfo;
-  SearchCepError? _searchCepError;
+  CepInfo? _cepInfo;
   String? selectedState;
   String? selectedCity;
   bool _searchingCep = false;
 
   String _getPostmonCepInfoString() {
-    return "${_postmonCepInfo!.logradouro}, ${_postmonCepInfo!.cidade} - ${_postmonCepInfo!.estado}, ${_postmonCepInfo!.cep}";
+    return "${_cepInfo!.logradouro}, ${_cepInfo!.cidade} - ${_cepInfo!.estado}, ${_cepInfo!.cep}";
   }
 
   void _changeCepInfo() async {
     var cep = _cepTextController.text;
 
-    if (_cepTextController.text.isEmpty) {
-      setState(() {
-        _searchCepError = null;
-        _postmonCepInfo = null;
-      });
-
-      return;
-    }
-
-    var postmonSearchCep = PostmonSearchCep();
-
     setState(() {
       _searchingCep = true;
     });
 
-    var postmonCepInfo = (await postmonSearchCep.searchInfoByCep(cep: cep));
-
-    postmonCepInfo.fold((l) {
-      setState(() {
-        _searchCepError = l;
-        _postmonCepInfo = null;
-      });
-    }, (r) {
-      setState(() {
-        _postmonCepInfo = r;
-        _searchCepError = null;
-      });
-    });
+    _cepInfo = (await CepService.getAddressByCep(cep));
 
     setState(() {
       _searchingCep = false;
@@ -218,7 +163,7 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
                         ),
                         keyboardType: TextInputType.datetime,
                         validator: (campo) {
-                          return validateBirthDate(campo);
+                          return checkIsEmpty(campo);
                         },
                         inputFormatters: [dataFormatter],
                       ),
@@ -243,15 +188,16 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
                         ),
                       ),
                       TextFormField(
-                          controller: _telefoneTextController,
-                          decoration: const InputDecoration(
-                            labelText: 'Telefone *',
-                          ),
-                          keyboardType: TextInputType.phone,
-                          validator: (campo) {
-                            return checkIsEmpty(campo);
-                          },
-                          inputFormatters: [maskFormatter],),
+                        controller: _telefoneTextController,
+                        decoration: const InputDecoration(
+                          labelText: 'Telefone *',
+                        ),
+                        keyboardType: TextInputType.phone,
+                        validator: (campo) {
+                          return checkIsEmpty(campo);
+                        },
+                        inputFormatters: [maskFormatter],
+                      ),
                       TextFormField(
                         controller: _emailTextController,
                         decoration: const InputDecoration(
@@ -302,8 +248,7 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
                         ),
                         onChanged: (String e) => _changeCepInfo(),
                         validator: (campo) {
-                          if (_searchCepError != null) {
-                            String out = _searchCepError!.errorMessage;
+                          if (_cepInfo != null && !_cepInfo!.hasData) {
                             return null;
                           }
                           String? out = checkIsEmpty(campo);
@@ -313,7 +258,7 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
                           return null;
                         },
                       ),
-                      _searchCepError != null || _postmonCepInfo != null
+                      _cepInfo != null
                           ? Column(
                               children: [
                                 const SizedBox(
@@ -329,8 +274,8 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
                                               BorderRadius.circular(5.0),
                                         ),
                                         child: Text(
-                                          _searchCepError != null
-                                              ? _searchCepError!.errorMessage
+                                          !_cepInfo!.hasData
+                                              ? _cepInfo!.errorMessage ?? ""
                                               : _getPostmonCepInfoString(),
                                           style: const TextStyle(
                                             fontSize: 16.0,
@@ -410,42 +355,49 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
                                   Map<String, double> coordinates =
                                       await CoordinatesService
                                               .fetchCoordinatesByAddrees(
-                                                  _postmonCepInfo!.logradouro ??
-                                                      "",
-                                                  _postmonCepInfo!.cidade ?? "",
-                                                  _postmonCepInfo!.estado ?? "",
-                                                  _postmonCepInfo!.cep ?? "") ??
+                                                  _cepInfo!.logradouro ?? "",
+                                                  _cepInfo!.cidade ?? "",
+                                                  _cepInfo!.estado ?? "",
+                                                  _cepInfo!.cep ?? "") ??
                                           {};
-                                  await _uploadImageToFirebase();
-                                  
+
+                                  String imageUrl = await StorageService
+                                          .uploadImageToFirebase(_image) ??
+                                      "";
+
                                   if (userType == UserType.Patient) {
                                     final firestoreDao =
                                         FirestoreDao<UserModel>();
 
                                     await firestoreDao.setData(UserModel(
-                                      id: authModel.uid,
-                                      email: _emailTextController.text,
-                                      fullName: _nameTextContoller.text,
-                                      gender: stringToGender(_selectedGender!),
-                                      phoneNumber: _telefoneTextController.text,
-                                      dataNascimento: stringToDate(_birthDateTextController.text),
-                                      latitude: coordinates["latitude"] ?? 0,
-                                      longitude: coordinates["longitude"] ?? 0,
-                                      address: _getPostmonCepInfoString(),
-                                      imageUrl: imageUrl,
-                                      agenda: List.generate(32, (i)=>[]).toString()
-                                    ));
+                                        id: authModel.uid,
+                                        email: _emailTextController.text,
+                                        fullName: _nameTextContoller.text,
+                                        gender:
+                                            stringToGender(_selectedGender!),
+                                        phoneNumber:
+                                            _telefoneTextController.text,
+                                        dataNascimento: stringToDate(
+                                            _birthDateTextController.text),
+                                        latitude: coordinates["latitude"] ?? 0,
+                                        longitude:
+                                            coordinates["longitude"] ?? 0,
+                                        address: _getPostmonCepInfoString(),
+                                        imageUrl: imageUrl,
+                                        agenda: List.generate(32, (i) => [])
+                                            .toString()));
                                   } else {
                                     final firestoreDao =
                                         FirestoreDao<EspecialistModel>();
-                                    
+
                                     await firestoreDao.setData(EspecialistModel(
                                       id: authModel.uid,
                                       email: _emailTextController.text,
                                       fullName: _nameTextContoller.text,
                                       gender: stringToGender(_selectedGender!),
                                       phoneNumber: _telefoneTextController.text,
-                                      dataNascimento: stringToDate(_birthDateTextController.text),
+                                      dataNascimento: stringToDate(
+                                          _birthDateTextController.text),
                                       CRP: _crptTextController.text,
                                       especialization: stringToEspscialization(
                                           _especialization!),
@@ -454,7 +406,8 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
                                       longitude: coordinates["longitude"] ?? 0,
                                       address: _getPostmonCepInfoString(),
                                       imageUrl: imageUrl,
-                                      agenda: List.generate(32, (i)=>'14:30').toString(),
+                                      agenda: List.generate(32, (i) => '14:30')
+                                          .toString(),
                                     ));
                                   }
                                 }

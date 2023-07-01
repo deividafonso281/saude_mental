@@ -78,8 +78,6 @@ class AuthProvider extends ChangeNotifier {
 
       await result.user?.updateDisplayName(userTypeString);
 
-      print("${result.user!.displayName} ++++++++++++++++");
-
       return _userFromFirebase(result.user);
     } catch (e) {
       print("Error on the new user registration = " + e.toString());
@@ -102,11 +100,6 @@ class AuthProvider extends ChangeNotifier {
       notifyListeners();
       return false;
     }
-  }
-
-  //Method to handle password reset email
-  Future<void> sendPasswordResetEmail(String email) async {
-    await auth.sendPasswordResetEmail(email: email);
   }
 
   //Method to handle user signing out
