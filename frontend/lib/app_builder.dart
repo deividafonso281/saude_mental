@@ -30,14 +30,13 @@ class MyApp extends StatelessWidget {
             builder: (_, authProviderRef, __) {
               if (userSnapshot.connectionState == ConnectionState.active) {
                 if (userSnapshot.hasData &&
+                    userSnapshot.data != null &&
+                    userSnapshot.data!.userData != null &&
                     authProvider.status == Status.Authenticated) {
-                  final userModel = Provider.of<AuthModel>(context);
-
-                  print(" $userModel");
-                  return userModel.runtimeType != EspecialistModel
+                  return userSnapshot.data.runtimeType != EspecialistModel
                       ? const SearchScreen()
-                      : const CadastroTerapeuta();
-                } else {
+                      : const SearchScreen();
+                } else if (authProvider.status == Status.Unauthenticated) {
                   return const LoginScreen();
                 }
               }

@@ -28,36 +28,45 @@ class AuthWidgetBuilder extends StatelessWidget {
       stream: authService.user,
       builder: (BuildContext context, AsyncSnapshot<AuthModel> snapshot) {
         final AuthModel? user = snapshot.data;
+        print(user);
+        if (user != null) {
+          return StreamBuilder<UserModel>(
+              stream: FirestoreDao<UserModel>().dataStream(todoId: user.uid),
+              builder: (BuildContext userModelContext,
+                  AsyncSnapshot<UserModel> userModelSnapshot) {
+                final UserModel? userModel = userModelSnapshot.data;
 
-        if (user != null && authService.status == Status.Authenticated) {
-          print("$user chegou aquii");
-          print(user.uid);
-          var str = FirestoreDao<UserModel>().dataStream(todoId: user.uid);
+                if (userModel != null) {
+                  user.userData = userModel;
 
-          return StreamBuilder(
-            stream: str,
-            builder: (BuildContext userContext, AsyncSnapshot userSnapshot) {
-              final UserModel? userModel = userSnapshot.data;
-              final error = userSnapshot.error;
-              print(userSnapshot.connectionState);
-              print(userSnapshot.data);
-              print(error);
-              print("$userModel chegou userModel");
-              if (userModel != null) {
-                print(userModel);
-                return MultiProvider(
-                  providers: [
-                    Provider<UserModel>.value(value: userModel),
-                    Provider<AuthModel>.value(value: user),
-                  ],
-                  child: builder(userContext, snapshot),
-                );
-              }
-              return builder(userContext, snapshot);
-            },
-          );
+                  return MultiProvider(
+                    providers: [
+                      Provider<AuthModel>.value(value: user),
+                    ],
+                    child: builder(userModelContext, snapshot),
+                  );
+                }
+
+                return StreamBuilder<EspecialistModel>(
+                    stream: FirestoreDao<EspecialistModel>()
+                        .dataStream(todoId: user.uid),
+                    builder: (BuildContext especialistContext,
+                        AsyncSnapshot<EspecialistModel> especialistSnapshot) {
+                      final EspecialistModel? especialistModel =
+                          especialistSnapshot.data;
+
+                      if (especialistModel != null) {
+                        user.userData = especialistModel;
+
+                        return MultiProvider(providers: [
+                          Provider<AuthModel>.value(value: user),
+                        ], child: builder(especialistContext, snapshot));
+                      }
+
+                      return builder(especialistContext, snapshot);
+                    });
+              });
         }
-
         return builder(context, snapshot);
       },
     );

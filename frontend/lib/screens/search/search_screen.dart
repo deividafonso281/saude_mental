@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:frontend/models/auth_model.dart';
 import 'package:frontend/models/user_model.dart';
 import 'package:frontend/screens/search/common.dart';
 import 'package:provider/provider.dart';
@@ -29,8 +30,8 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context);
-    final userModel = Provider.of<UserModel>(context);
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final userModel = Provider.of<AuthModel>(context, listen: false).userData;
 
     return Scaffold(
       body: Center(
@@ -145,7 +146,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     List<EspecialistModel> out = [];
                     for (EspecialistModel esp in listEsp) {
                       if (calculateDistance(esp.latitude, esp.longitude,
-                              userModel.latitude, userModel.longitude) <
+                              userModel!.latitude, userModel.longitude) <
                           (_selectedKm ?? double.infinity)) {
                         out.add(esp);
                       }

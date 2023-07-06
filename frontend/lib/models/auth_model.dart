@@ -1,12 +1,14 @@
+import 'package:frontend/models/user_model.dart';
+
 class AuthModel {
   String uid;
   String? email;
-  UserType? userType;
+  UserModel? userData;
 
   AuthModel({
     required this.uid,
     this.email,
-    this.userType,
+    this.userData,
   });
 }
 

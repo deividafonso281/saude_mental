@@ -101,8 +101,7 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
 
     if (screenRouteArgs == null) {
       final authModel = Provider.of<AuthModel>(context);
-      final userModel = Provider.of<UserModel>(context);
-      userType = authModel.userType;
+      userType = UserType.Especialist;
     } else {
       userType = stringToUserType(screenRouteArgs as String);
     }
@@ -351,9 +350,9 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
 
                                   AuthModel authModel = await authProvider
                                       .registerWithEmailPasswordAndUserType(
-                                          _emailTextController.text,
-                                          _passwordTextContoller.text,
-                                          userType!);
+                                    _emailTextController.text,
+                                    _passwordTextContoller.text,
+                                  );
 
                                   Map<String, double> coordinates =
                                       await CoordinatesService
@@ -402,6 +401,8 @@ class CadastroTerapeutaState extends State<CadastroTerapeuta> {
                                         .dataStream(todoId: authModel.uid)
                                         .first);
                                   }
+
+                                  await authProvider.signOut();
                                 }
                               },
                               child: const Text('Cadastrar'),

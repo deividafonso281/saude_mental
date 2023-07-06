@@ -69,6 +69,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                       _emailTextController.text,
                                       _passwordTextContoller.text);
 
+                              print(status);
+                              print(authProvider.status);
+
                               if (!status) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(

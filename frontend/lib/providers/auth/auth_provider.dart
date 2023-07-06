@@ -25,21 +25,21 @@ status for your UI or widgets to listen.
 
 class AuthProvider extends ChangeNotifier {
   //Firebase Auth object
-  late FirebaseAuth auth;
+  late FirebaseAuth _auth;
 
   //Default status
   Status _status = Status.Uninitialized;
 
   Status get status => _status;
 
-  Stream<AuthModel> get user => auth.authStateChanges().map(_userFromFirebase);
+  Stream<AuthModel> get user => _auth.authStateChanges().map(_userFromFirebase);
 
   AuthProvider() {
     //initialise object
-    auth = FirebaseAuth.instance;
+    _auth = FirebaseAuth.instance;
 
     //listener for authentication changes such as user sign in and sign out
-    auth.authStateChanges().listen(onAuthStateChanged);
+    _auth.authStateChanges().listen(onAuthStateChanged);
   }
 
   //Create user object based on the given User
@@ -53,7 +53,9 @@ class AuthProvider extends ChangeNotifier {
 
   //Method to detect live auth changes such as user sign in and sign out
   Future<void> onAuthStateChanged(User? firebaseUser) async {
-    if (firebaseUser == null) {
+    print(firebaseUser);
+    print("Firebase user arrived here");
+    if (firebaseUser == null || status == Status.Registering) {
       _status = Status.Unauthenticated;
     } else {
       _userFromFirebase(firebaseUser);
@@ -64,15 +66,17 @@ class AuthProvider extends ChangeNotifier {
 
   //Method for new user registration using email and password
   Future<AuthModel> registerWithEmailPasswordAndUserType(
-      String email, String password, UserType userType) async {
+      String email, String password) async {
     try {
       _status = Status.Registering;
       notifyListeners();
 
-      final UserCredential result = await auth.createUserWithEmailAndPassword(
+      final UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
 
-      return _userFromFirebase(result.user);
+      User? user = result.user;
+
+      return _userFromFirebase(user);
     } catch (e) {
       print("Error on the new user registration = " + e.toString());
       _status = Status.Unauthenticated;
@@ -86,7 +90,8 @@ class AuthProvider extends ChangeNotifier {
     try {
       _status = Status.Authenticating;
       notifyListeners();
-      await auth.signInWithEmailAndPassword(email: email, password: password);
+
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
       return true;
     } catch (e) {
       print("Error on the sign in = " + e.toString());
@@ -98,12 +103,12 @@ class AuthProvider extends ChangeNotifier {
 
   //Method to handle password reset email
   Future<void> sendPasswordResetEmail(String email) async {
-    await auth.sendPasswordResetEmail(email: email);
+    await _auth.sendPasswordResetEmail(email: email);
   }
 
   //Method to handle user signing out
   Future signOut() async {
-    auth.signOut();
+    _auth.signOut();
     _status = Status.Unauthenticated;
     notifyListeners();
     return Future.delayed(Duration.zero);

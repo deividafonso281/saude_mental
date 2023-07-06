@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/models/auth_model.dart';
 import 'package:frontend/models/user_model.dart';
 import 'package:frontend/screens/search/common.dart';
 import 'package:frontend/screens/search/psychologist_card.dart';
@@ -27,7 +28,7 @@ class CardListState extends State<CardList> {
 
   @override
   Widget build(BuildContext context) {
-    final userModel = Provider.of<UserModel>(context);
+    final userModel = Provider.of<AuthModel>(context).userData;
 
     return StreamBuilder<List<EspecialistModel>>(
       stream: widget.items,
@@ -55,7 +56,7 @@ class CardListState extends State<CardList> {
             double latitude = item.latitude;
             double longitude = item.longitude;
             double dist = calculateDistance(
-                latitude, longitude, userModel.latitude, userModel.longitude);
+                latitude, longitude, userModel!.latitude, userModel.longitude);
 
             cardList.add(
               MyCard(
